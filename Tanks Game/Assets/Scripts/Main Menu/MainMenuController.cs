@@ -11,32 +11,20 @@ public class MainMenuController : MonoBehaviour
     public TMP_Text lastLog;
     [Space]
     public GameObject lobbyMenu;
-    public GameObject roomMenu;
-    public GameObject roomsListingMenu;
 
     void Awake()
     {
         Instance = this;    
     }
 
-    public void OpenRoomsListing()
+    public void onClick_OpenMenu(GameObject toOpen)
     {
+        toOpen.SetActive(true);
         lobbyMenu.SetActive(false);
-        roomMenu.SetActive(false);
-        roomsListingMenu.SetActive(true);
     }
-
-    public void OpenRoomMenu()
-    {
-        lobbyMenu.SetActive(false);
-        roomMenu.SetActive(true);
-        roomsListingMenu.SetActive(false);
-    }
-
-    public void OpenLobbyMenu()
+    public void onClick_ReturnToLobby(GameObject toClose)
     {
         lobbyMenu.SetActive(true);
-        roomMenu.SetActive(false);
-        roomsListingMenu.SetActive(false);
+        toClose.SetActive(false);
     }
 }

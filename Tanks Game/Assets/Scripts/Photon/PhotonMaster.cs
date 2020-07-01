@@ -8,6 +8,8 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
     public static PhotonMaster Instance { get; private set; }
     #endregion
 
+    public ClientData nowClient { get; private set; }
+
     void Awake()
     {
         Instance = this;
@@ -15,6 +17,8 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
 
     void Start()
     {
+        nowClient = GetComponent<ClientData>();
+
         Debugger.CreateLog("Connecting to Photon...");
 
         PhotonNetwork.ConnectUsingSettings();
@@ -46,5 +50,26 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         Debugger.CreateLog("Failed to create a room. Maybe there is another room with the same name.");
+    }
+
+    public void JoinRoom(string _name)
+    {
+        PhotonNetwork.JoinRoom(_name);
+    }
+
+    public override void OnJoinedRoom()
+    {
+        Debugger.CreateLog("Successfully joined a room.");
+        RoomReferences.Instance._RoomUI.Show(PhotonNetwork.CurrentRoom);
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        Debugger.CreateLog("Failed to join a room " + message + ".");
+    }
+
+    public void LeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom();
     }
 }

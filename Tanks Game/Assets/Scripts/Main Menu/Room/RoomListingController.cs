@@ -3,12 +3,13 @@ using Photon.Pun;
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
-public class RoomCreator : MonoBehaviourPunCallbacks
+public class RoomListingController : MonoBehaviourPunCallbacks
 {
+    #region Creating
     public Transform contentTrans;
     public GameObject roomUIElementPrefab;
-
     public TMP_Text roomNameInput;
+    #endregion
 
     private List<RoomListing> listings = new List<RoomListing>();
 
@@ -41,7 +42,9 @@ public class RoomCreator : MonoBehaviourPunCallbacks
                 RoomListing listing = listingGO.GetComponent<RoomListing>();
 
                 if (listing != null)
-                    listing.SetRoomInfo(info);
+                    listing.SetRoomListingInfo(info);
+
+                listings.Add(listing);
             }
         }
     }
