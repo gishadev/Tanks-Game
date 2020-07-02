@@ -7,6 +7,7 @@ public class RoomReferences : MonoBehaviour
     #endregion
 
     public RoomListingController _RoomListingController;
+    public PlayerListingController _PlayerListingController;
     public RoomUI _RoomUI;
 
     void Awake()

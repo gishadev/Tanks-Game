@@ -12,8 +12,10 @@ public class RoomUI : MonoBehaviour
     public void SetRoomInfo(RoomInfo roomInfo)
     {
         _RoomInfo = roomInfo;
-
         nameText.text = roomInfo.Name;
+
+        // Adding all players listings.
+        RoomReferences.Instance._PlayerListingController.CreatePlayersListings();
     }
 
     public void Show(RoomInfo roomInfo)

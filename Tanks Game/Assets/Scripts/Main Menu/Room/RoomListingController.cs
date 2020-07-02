@@ -7,7 +7,7 @@ public class RoomListingController : MonoBehaviourPunCallbacks
 {
     #region Creating
     public Transform contentTrans;
-    public GameObject roomUIElementPrefab;
+    public GameObject roomListingPrefab;
     public TMP_Text roomNameInput;
     #endregion
 
@@ -21,30 +21,38 @@ public class RoomListingController : MonoBehaviourPunCallbacks
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        foreach(RoomInfo info in roomList)
+        foreach (RoomInfo info in roomList)
         {
-            // Removed from rooms list.
+            int index = listings.FindIndex(x => x._RoomInfo.Name == info.Name);
+            // Removed room listing.
             if (info.RemovedFromList)
             {
-                int i = listings.FindIndex(x => x._RoomInfo.Name == info.Name);
-
-                if (i != -1)
+                if (index != -1)
                 {
-                    Destroy(listings[i].gameObject);
-                    listings.RemoveAt(i);
+                    Destroy(listings[index].gameObject);
+                    listings.RemoveAt(index);
                 }
             }
-
-            // Added to rooms list.
             else
             {
-                GameObject listingGO = Instantiate(roomUIElementPrefab, contentTrans);
-                RoomListing listing = listingGO.GetComponent<RoomListing>();
+                // Adding a new room listing.
+                if (index == -1)
+                {
+                    GameObject listingGO = Instantiate(roomListingPrefab, contentTrans);
+                    RoomListing listing = listingGO.GetComponent<RoomListing>();
 
-                if (listing != null)
-                    listing.SetRoomListingInfo(info);
+                    if (listing != null)
+                        listing.SetRoomListingInfo(info);
 
-                listings.Add(listing);
+                    listings.Add(listing);
+                }
+
+                // Modifying room listing.
+                else
+                {
+                    // Update players count.
+                    listings[index].SetRoomListingInfo(info);
+                }
             }
         }
     }
