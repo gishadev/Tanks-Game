@@ -13,7 +13,7 @@ public class PlayerListingController : MonoBehaviourPunCallbacks
 
     private List<PlayerListing> listings = new List<PlayerListing>();
 
-    public void CreatePlayersListings()
+    public void CreateNewPlayersListings()
     {
         ClearOldListings();
         foreach (Player p in PhotonNetwork.PlayerList)
@@ -46,6 +46,9 @@ public class PlayerListingController : MonoBehaviourPunCallbacks
             listing.SetPlayerListingInfo(newPlayer);
 
         listings.Add(listing);
+
+        // Updating player count.
+        RoomReferences.Instance._RoomUI.SetPlayersCount();
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -57,5 +60,10 @@ public class PlayerListingController : MonoBehaviourPunCallbacks
             Destroy(listings[index].gameObject);
             listings.RemoveAt(index);
         }
+
+        CreateNewPlayersListings();
+
+        // Updating player count.
+        RoomReferences.Instance._RoomUI.SetPlayersCount();
     }
 }

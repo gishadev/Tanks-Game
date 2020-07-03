@@ -21,6 +21,7 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
 
         Debugger.CreateLog("Connecting to Photon...");
 
+        PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.ConnectUsingSettings();
     }
 
@@ -28,6 +29,13 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
     {
         Debugger.CreateLog("Successfully connected to Photon.");
 
+        JoinLobby();
+    }
+
+    public void JoinLobby()
+    {
+        Debugger.CreateLog("Joining a lobby.");
+        MainMenuController.Instance.ChangeMenuTo(MainMenuController.Instance.lobbyMenu);
         PhotonNetwork.JoinLobby();
     }
 
@@ -38,8 +46,16 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
 
     public void CreateRoom(string _name)
     {
+        // Setting room name.
+        string name;
+        if (_name.Length <= 1)
+            name = string.Format("{0}'s Room", nowClient.Nickname);
+        else
+            name = _name;
+
+        // Setting room options.
         RoomOptions opt = new RoomOptions() { MaxPlayers = 10, IsOpen = true, IsVisible = true };
-        PhotonNetwork.JoinOrCreateRoom(_name, opt, TypedLobby.Default);
+        PhotonNetwork.JoinOrCreateRoom(name, opt, TypedLobby.Default);
     }
 
     public override void OnCreatedRoom()
@@ -54,6 +70,7 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
 
     public void JoinRoom(string _name)
     {
+        Debugger.CreateLog("Joining room.");
         PhotonNetwork.JoinRoom(_name);
     }
 
@@ -71,5 +88,11 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
     public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
+    }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        Debugger.CreateLog("Disconnected.");
+        JoinLobby();
     }
 }

@@ -17,5 +17,4 @@ public class ClientData : MonoBehaviour
         Nickname = _text;
         PhotonNetwork.LocalPlayer.NickName = _text;
     }
-
 }

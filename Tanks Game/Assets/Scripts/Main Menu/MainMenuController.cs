@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
-using TMPro; 
-
+using TMPro;
 
 public class MainMenuController : MonoBehaviour
 {
@@ -10,21 +9,17 @@ public class MainMenuController : MonoBehaviour
 
     public TMP_Text lastLog;
     [Space]
+    public GameObject[] menus;
     public GameObject lobbyMenu;
-
     void Awake()
     {
-        Instance = this;    
+        Instance = this;
     }
 
-    public void onClick_OpenMenu(GameObject toOpen)
+    public void ChangeMenuTo(GameObject target)
     {
-        toOpen.SetActive(true);
-        lobbyMenu.SetActive(false);
-    }
-    public void onClick_ReturnToLobby(GameObject toClose)
-    {
-        lobbyMenu.SetActive(true);
-        toClose.SetActive(false);
+        foreach (GameObject menu in menus)
+            menu.SetActive(false);
+        target.SetActive(true);
     }
 }
