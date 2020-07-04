@@ -11,6 +11,8 @@ public class MainMenuController : MonoBehaviour
     [Space]
     public GameObject[] menus;
     public GameObject lobbyMenu;
+
+    public GameObject loadingScreen;
     void Awake()
     {
         Instance = this;

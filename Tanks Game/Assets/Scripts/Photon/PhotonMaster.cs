@@ -35,13 +35,18 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
     public void JoinLobby()
     {
         Debugger.CreateLog("Joining a lobby.");
+
         MainMenuController.Instance.ChangeMenuTo(MainMenuController.Instance.lobbyMenu);
+        MainMenuController.Instance.loadingScreen.SetActive(true);
+
         PhotonNetwork.JoinLobby();
     }
 
     public override void OnJoinedLobby()
     {
         Debugger.CreateLog("Successfully joined to a lobby.");
+
+        MainMenuController.Instance.loadingScreen.SetActive(false);
     }
 
     public void CreateRoom(string _name)
