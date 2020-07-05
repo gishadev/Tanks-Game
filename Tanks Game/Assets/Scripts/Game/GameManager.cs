@@ -5,17 +5,15 @@ public class GameManager : MonoBehaviour
     #region Singleton
     public static GameManager Instance { private set; get; }
     #endregion
+    public CameraTransform cam;
+
     public GameObject playerPrefab;
 
     public Transform[] spawnpoints;
 
-    void Awake()
+    private void OnEnable()
     {
-        Instance = this;
-    }
-
-    void Start()
-    {
-        Instantiate(playerPrefab, spawnpoints[Random.Range(0, spawnpoints.Length)]);
+        if (Instance == null)
+            Instance = this;
     }
 }

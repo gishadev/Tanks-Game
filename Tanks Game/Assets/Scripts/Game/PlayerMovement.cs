@@ -6,8 +6,6 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float speed;
-    [Space]
-    public Camera cam;
 
     PhotonView pv;
     Rigidbody rb;
@@ -16,10 +14,6 @@ public class PlayerMovement : MonoBehaviour
     {
         pv = GetComponent<PhotonView>();
         rb = GetComponent<Rigidbody>();
-
-        // Destroying other players cameras.
-        if (!pv.IsMine)
-            Destroy(cam.gameObject);
     }
 
     void Update()
