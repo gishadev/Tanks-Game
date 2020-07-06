@@ -6,7 +6,7 @@ public class CameraTransform : MonoBehaviour
 
     void Update()
     {
-        transform.position = new Vector3(Target.position.x, transform.position.y, Target.position.z);
+        transform.position = new Vector3(Target.position.x, Target.position.y, -10f);
     }
 
     public void SetTarget(Transform target)
