@@ -9,6 +9,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] GameObject turret;
     [SerializeField] GameObject body;
 
+    KeyCode[] moveKeyCodes = { KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D, KeyCode.UpArrow, KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.DownArrow };
+
     Vector2 moveInput;
     Vector2 rawInput;
 
@@ -29,11 +31,12 @@ public class PlayerMovement : MonoBehaviour
             moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
             // Input for body rotation.
-            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
-                rawInput = moveInput;
+            foreach (KeyCode key in moveKeyCodes)
+                if (Input.GetKey(key))
+                    rawInput = moveInput;
 
-            TurretRotation();
             BodyRotation();
+            TurretRotation();
         }
     }
 
@@ -52,16 +55,12 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = Vector2.zero;
             return;
         }
-            
+
         rb.AddForce(moveInput.normalized * acceleration);
 
-        // Limiting velocity
+        // Limiting velocity.
         if (rb.velocity.magnitude > maxSpeed)
-        {
             rb.velocity = rb.velocity.normalized * maxSpeed;
-        }
-
-        Debug.Log(rb.velocity.magnitude);
     }
 
     void BodyRotation()

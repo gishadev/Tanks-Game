@@ -15,6 +15,8 @@ public class PhotonRoom : MonoBehaviourPunCallbacks
     private int gameSceneIndex = 1;
     private int lobbySceneIndex = 0;
 
+    List<PhotonPlayer> photonPlayers = new List<PhotonPlayer>();
+
     void Awake()
     {
         // Setting up singleton.
@@ -54,5 +56,14 @@ public class PhotonRoom : MonoBehaviourPunCallbacks
     void CreatePlayer()
     {
         PhotonPlayer pp = PhotonNetwork.Instantiate(Path.Combine("Prefabs", "Photon", "Photon Player"), Vector3.zero, Quaternion.identity).GetComponent<PhotonPlayer>();
+        photonPlayers.Add(pp);
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        int index = photonPlayers.FindIndex(x => x.player == otherPlayer);
+
+        if (index != -1)
+            photonPlayers.RemoveAt(index);
     }
 }

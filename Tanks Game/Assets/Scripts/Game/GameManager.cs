@@ -9,9 +9,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject playerPrefab;
 
-    public Transform[] spawnpoints;
-
-    private void OnEnable()
+    void Awake()
     {
         if (Instance == null)
             Instance = this;
