@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3273175454924943030}
   m_Layer: 8
   m_Name: Turret
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 7640928378771467921}
   m_Layer: 8
   m_Name: Player Avatar
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -244,6 +244,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c49a76840d2d52489458f6b02d164ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Id: 0
+  photonPlayer: {fileID: 0}
   isReadyToShoot: 1
   projPrefab: {fileID: 1716897775920958355, guid: 9cd8380944805bf4eba1225eccf07f66,
     type: 3}
@@ -260,7 +262,7 @@ GameObject:
   - component: {fileID: 6991600102795006516}
   m_Layer: 8
   m_Name: Shot Pos
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -294,7 +296,7 @@ GameObject:
   - component: {fileID: 2075144778699283866}
   m_Layer: 8
   m_Name: Body
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

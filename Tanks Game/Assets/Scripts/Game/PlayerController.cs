@@ -1,17 +1,21 @@
-﻿using Photon.Pun;
+﻿using ExitGames.Client.Photon;
+using Photon.Pun;
 using System.Collections;
 using System.IO;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private bool isReadyToShoot = true;
+     public int Id = -1;
+
+    [HideInInspector] public PhotonPlayer photonPlayer;
+
+    public bool isReadyToShoot = true;
 
     public GameObject projPrefab;
     public Transform shootPos;
 
     [SerializeField] private float shootDelay = 2f;
-
 
     PhotonView pv;
 
@@ -39,10 +43,12 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Delay()
     {
-        while (true)
+        while (isReadyToShoot == false)
         {
             yield return new WaitForSeconds(shootDelay);
             isReadyToShoot = true;
         }
     }
+
+
 }

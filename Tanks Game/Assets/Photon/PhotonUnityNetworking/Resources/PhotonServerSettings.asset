@@ -42,6 +42,16 @@ MonoBehaviour:
   - AddPlayerToList
   - destroy
   - dequeue
+  - die
+  - SetPlayerController
+  - AddToList
+  - Init
+  - SetControllerID
+  - SetController
+  - DestroyProj
+  - InitPhotonPlayer
+  - SetControllerId
+  - Die
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
