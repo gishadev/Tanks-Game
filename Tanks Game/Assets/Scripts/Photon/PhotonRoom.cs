@@ -1,6 +1,5 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -13,7 +12,6 @@ public class PhotonRoom : MonoBehaviourPunCallbacks
     #endregion
 
     private int gameSceneIndex = 1;
-    private int lobbySceneIndex = 0;
 
     public List<PhotonPlayer> photonPlayers = new List<PhotonPlayer>();
 

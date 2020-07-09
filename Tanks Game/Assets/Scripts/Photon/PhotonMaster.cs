@@ -1,5 +1,6 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class PhotonMaster : MonoBehaviourPunCallbacks
@@ -12,14 +13,24 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
 
     void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+            Instance = this;
+        else
+        {
+            if (Instance != this)
+            {
+                Destroy(Instance.gameObject);
+                Instance = this;
+            }
+        }
+        DontDestroyOnLoad(gameObject);
     }
 
     void Start()
     {
         nowClient = GetComponent<ClientData>();
 
-        Debugger.CreateLog("Connecting to Photon...");
+        Debug.Log("Connecting to Photon...");
 
         PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.ConnectUsingSettings();
@@ -27,24 +38,29 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        Debugger.CreateLog("Successfully connected to Photon.");
+        Debug.Log("Successfully connected to Photon.");
 
         JoinLobby();
     }
 
     public void JoinLobby()
     {
-        Debugger.CreateLog("Joining a lobby.");
+        Debug.Log("Joining a lobby.");
 
-        MainMenuController.Instance.ChangeMenuTo(MainMenuController.Instance.lobbyMenu);
-        MainMenuController.Instance.loadingScreen.SetActive(true);
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            MainMenuController.Instance.ChangeMenuTo(MainMenuController.Instance.lobbyMenu);
+            MainMenuController.Instance.loadingScreen.SetActive(true);
 
-        PhotonNetwork.JoinLobby();
+            PhotonNetwork.JoinLobby();
+        }
+        else
+            SceneManager.LoadScene(0);
     }
 
     public override void OnJoinedLobby()
     {
-        Debugger.CreateLog("Successfully joined to a lobby.");
+        Debug.Log("Successfully joined to a lobby.");
 
         MainMenuController.Instance.loadingScreen.SetActive(false);
     }
@@ -65,29 +81,29 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
 
     public override void OnCreatedRoom()
     {
-        Debugger.CreateLog("Successfully created a room.");
+        Debug.Log("Successfully created a room.");
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
-        Debugger.CreateLog("Failed to create a room. Maybe there is another room with the same name.");
+        Debug.Log("Failed to create a room. Maybe there is another room with the same name.");
     }
 
     public void JoinRoom(string _name)
     {
-        Debugger.CreateLog("Joining room.");
+        Debug.Log("Joining room.");
         PhotonNetwork.JoinRoom(_name);
     }
 
     public override void OnJoinedRoom()
     {
-        Debugger.CreateLog("Successfully joined a room.");
+        Debug.Log("Successfully joined a room.");
         RoomReferences.Instance._RoomUI.Show(PhotonNetwork.CurrentRoom);
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        Debugger.CreateLog("Failed to join a room " + message + ".");
+        Debug.Log("Failed to join a room " + message + ".");
     }
 
     public void LeaveRoom()
@@ -97,7 +113,7 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        Debugger.CreateLog("Disconnected.");
+        Debug.Log("Disconnected.");
         JoinLobby();
     }
 }

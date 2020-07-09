@@ -16,11 +16,13 @@ public class PlayerMovement : MonoBehaviour
 
     PhotonView pv;
     Rigidbody2D rb;
+    Animator animator;
 
     void Start()
     {
         pv = GetComponent<PhotonView>();
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -32,8 +34,17 @@ public class PlayerMovement : MonoBehaviour
 
             // Input for body rotation.
             foreach (KeyCode key in moveKeyCodes)
+            {
                 if (Input.GetKey(key))
+                {
                     rawInput = moveInput;
+                    animator.SetBool("Moving", true);
+                    break;
+                }
+                else animator.SetBool("Moving", false);
+            }
+
+
 
             BodyRotation();
             TurretRotation();
@@ -70,6 +81,7 @@ public class PlayerMovement : MonoBehaviour
     }
     void TurretRotation()
     {
+        turret.transform.rotation = Quaternion.Euler(0f, 0f, turret.transform.rotation.z - transform.rotation.z);
         Vector2 cursorPos = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
 
         float rotZ = Mathf.Atan2(cursorPos.y, cursorPos.x) * Mathf.Rad2Deg - 90f;

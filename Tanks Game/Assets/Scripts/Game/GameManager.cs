@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Photon.Pun;
+using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,5 +14,10 @@ public class GameManager : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
+    }
+
+    public void onClick_Disconnent()
+    {
+        PhotonNetwork.Disconnect();
     }
 }

@@ -1,12 +1,10 @@
-﻿using ExitGames.Client.Photon;
-using Photon.Pun;
+﻿using Photon.Pun;
 using System.Collections;
-using System.IO;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-     public int Id = -1;
+    public int Id = -1;
 
     [HideInInspector] public PhotonPlayer photonPlayer;
 
@@ -18,10 +16,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float shootDelay = 2f;
 
     PhotonView pv;
+    Animator animator;
 
     void Start()
     {
         pv = GetComponent<PhotonView>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -29,16 +29,36 @@ public class PlayerController : MonoBehaviour
         if (pv.IsMine)
         {
             if (Input.GetMouseButtonDown(0) && isReadyToShoot)
-                Shoot();
+            {
+                CallShoot();
+                isReadyToShoot = false;
+                StartCoroutine(Delay());
+            }
         }
     }
 
-    void Shoot()
+    void CallShoot()
     {
-        PhotonNetwork.Instantiate(Path.Combine("Prefabs", "Photon", projPrefab.name), shootPos.position, shootPos.rotation);
+        pv.RPC("Shoot", RpcTarget.All, Time.time, shootPos.up, Id);
+        animator.SetBool("Shoot", true);
+    }
 
-        isReadyToShoot = false;
-        StartCoroutine(Delay());
+    [PunRPC]
+    void Shoot(float time, Vector3 up, int ownerId)
+    {
+        float latency = time / Time.time;
+        Vector2 position = shootPos.position - (-up * latency) - up;
+
+        Projectile proj = Instantiate(projPrefab, position, shootPos.rotation).GetComponent<Projectile>();
+        proj.ownerId = ownerId;
+
+        Debug.Log("latency: " + latency);
+    }
+
+    // For Animator.
+    public void SetShootToFalse()
+    {
+        animator.SetBool("Shoot", false);
     }
 
     IEnumerator Delay()
@@ -50,5 +70,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
+    public void TakeDamage()
+    {
+        photonPlayer.CallDie();
+    }
 }

@@ -16,7 +16,7 @@ public class RoomListingController : MonoBehaviourPunCallbacks
     public void OnClick_CreateRoom()
     {
         PhotonMaster.Instance.CreateRoom(roomNameInput.text);
-        Debugger.CreateLog("Creating room.");
+        Debug.Log("Creating room.");
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)

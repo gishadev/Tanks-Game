@@ -4,17 +4,16 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviourPun
 {
-    [SerializeField] private float speed;
+    [HideInInspector] public float ownerId;
+    [SerializeField] public float speed;
     [SerializeField] private float lifeTime;
 
     [SerializeField] private LayerMask whatIsSolid;
 
-    PhotonView pv;
+    public GameObject explosionEffect;
 
     void Start()
     {
-        pv = GetComponent<PhotonView>();
-
         StartCoroutine(LifeTimeProj());
     }
 
@@ -30,9 +29,13 @@ public class Projectile : MonoBehaviourPun
         {
             if (hitInfo.collider.CompareTag("Player"))
             {
-                hitInfo.collider.transform.parent.GetComponent<PlayerController>().photonPlayer.CallDie();
-            }
+                PlayerController controller = hitInfo.collider.GetComponentInParent<PlayerController>();
 
+                if (ownerId == controller.Id)
+                    return;
+                else
+                    controller.TakeDamage();
+            }
             DestroyProj();
         }
 
@@ -40,22 +43,16 @@ public class Projectile : MonoBehaviourPun
 
     IEnumerator LifeTimeProj()
     {
-        while(true)
+        while (true)
         {
             yield return new WaitForSeconds(lifeTime);
             DestroyProj();
         }
     }
 
-    //void CallDestroyProj()
-    //{
-    //    PhotonNetwork.Destroy(gameObject);
-    //    pv.RPC("DestroyProj", RpcTarget.All);
-    //}
-
-    [PunRPC]
     void DestroyProj()
     {
-        PhotonNetwork.Destroy(gameObject);
+        Instantiate(explosionEffect, transform.position, Quaternion.identity);
+        Destroy(gameObject);
     }
 }
