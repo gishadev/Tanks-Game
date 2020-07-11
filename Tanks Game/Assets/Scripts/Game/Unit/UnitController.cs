@@ -4,24 +4,43 @@ using UnityEngine;
 
 public class UnitController : MonoBehaviour
 {
-    public int Id = -1;
+    public int Owner_ID = -1;
 
     [HideInInspector] public PhotonPlayer photonPlayer;
+    [SerializeField] private bool isSelected;
 
+    [Header("Shoot")]
     public bool isReadyToShoot = true;
-
     public GameObject projPrefab;
     public Transform shootPos;
-
-    [SerializeField] private float shootDelay = 2f;
+    public float shootDelay = 2f;
 
     PhotonView pv;
     Animator animator;
-
+    UnitMovement movement;
+    Camera cam;
     void Start()
     {
         pv = GetComponent<PhotonView>();
         animator = GetComponent<Animator>();
+        movement = GetComponent<UnitMovement>();
+        cam = Camera.main;
+    }
+
+    void Update()
+    {
+        if (pv.IsMine)
+        {
+            if (isSelected)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    Vector2 destination = cam.ScreenToWorldPoint(Input.mousePosition);
+                    movement.StartMovement(destination);
+                    Debug.LogFormat("Destination is: x: {0}; y: {1};",destination.x, destination.y);
+                }
+            }
+        }
     }
 
     //void Update()

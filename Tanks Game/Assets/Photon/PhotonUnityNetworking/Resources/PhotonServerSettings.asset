@@ -53,6 +53,7 @@ MonoBehaviour:
   - SetControllerId
   - Die
   - Shoot
+  - SetUnitData
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

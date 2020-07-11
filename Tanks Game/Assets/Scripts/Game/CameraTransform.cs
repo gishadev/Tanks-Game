@@ -11,12 +11,7 @@ public class CameraTransform : MonoBehaviour
     float width, height;
     float xPos, yPos;
 
-    private Transform Target;
-
-    public void SetTarget(Transform target)
-    {
-        Target = target;
-    }
+    Vector3 newPos = new Vector3(0f,0f,-10f);
 
     Camera cam;
 
@@ -30,14 +25,20 @@ public class CameraTransform : MonoBehaviour
 
     void Update()
     {
-        Vector3 targetPoint = new Vector3(Target.position.x, Target.position.y, -10f);
-        if (targetPoint.x + width < b_Max.position.x && targetPoint.x - width > b_Min.position.x)
-            xPos = targetPoint.x;
-        if (targetPoint.y + height < b_Max.position.y && targetPoint.y - height > b_Min.position.y)
-            yPos = targetPoint.y;
+        Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"),Input.GetAxisRaw("Vertical"));
 
-        Vector3 newPos = new Vector3(xPos, yPos, -10f);
-        transform.position = Vector3.Lerp(transform.position, newPos, speed * Time.deltaTime);
+        //xPos += input.x * speed;
+        //yPos += input.y * speed;
+
+        //if (xPos + width < b_Max.position.x && xPos - width > b_Min.position.x)
+        //    newPos.x = xPos;
+        //if (yPos + height < b_Max.position.y && yPos - height > b_Min.position.y)
+        //    newPos.y = yPos;
+
+
+        //transform.position = Vector3.Lerp(transform.position, newPos, speed * Time.deltaTime);
+
+        transform.Translate(input * speed);
     }
 
 
