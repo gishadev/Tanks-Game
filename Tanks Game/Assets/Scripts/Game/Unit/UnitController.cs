@@ -5,9 +5,16 @@ using UnityEngine;
 public class UnitController : MonoBehaviour
 {
     public int Owner_ID = -1;
+    public int Unique_ID = -1;
 
+    public bool isSelected;
     [HideInInspector] public PhotonPlayer photonPlayer;
-    [SerializeField] private bool isSelected;
+    public Node CurrentNode { 
+        get
+        {
+           return movement.currentNode;
+        }
+    }
 
     [Header("Shoot")]
     public bool isReadyToShoot = true;
@@ -17,7 +24,7 @@ public class UnitController : MonoBehaviour
 
     PhotonView pv;
     Animator animator;
-    UnitMovement movement;
+    [HideInInspector] public UnitMovement movement;
     Camera cam;
     void Start()
     {
@@ -36,8 +43,8 @@ public class UnitController : MonoBehaviour
                 if (Input.GetMouseButtonDown(0))
                 {
                     Vector2 destination = cam.ScreenToWorldPoint(Input.mousePosition);
-                    movement.StartMovement(destination);
-                    Debug.LogFormat("Destination is: x: {0}; y: {1};",destination.x, destination.y);
+                    if (!Pathfinding.Instance.grid.IsBlockedWithUnit(Pathfinding.Instance.grid.GetNodeFromVector2(destination)))
+                        movement.StartMovement(destination);
                 }
             }
         }

@@ -1,6 +1,8 @@
 ﻿using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine;
+using System.Linq;
 
 public class PhotonPlayer : MonoBehaviourPun
 {
@@ -25,15 +27,39 @@ public class PhotonPlayer : MonoBehaviourPun
             Owner = pv.Owner;
             Id = Owner.ActorNumber;
 
-            unitsSpawner = UnitsManager.Instance.spawners[PhotonNetwork.CountOfPlayers - 1];
+            unitsSpawner = UnitsManager.Instance.spawners[0];
 
             unitsSpawner.Owner = this;
-            foreach (Spawnpoint s in unitsSpawner.spawnpoints)
-                unitsSpawner.SpawnUnit(s);
+            unitsSpawner.InitUnitsSpawn();
 
             // Adding this photon player to list with its controller.
             CallInitPhotonPlayer(this);
         }
+    }
+
+    void Update()
+    {
+        if (pv.IsMine)
+        {
+            // Unit selection.
+            if (Input.GetMouseButtonDown(0))
+            {
+                Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Node selectedNode = Pathfinding.Instance.grid.GetNodeFromVector2(mousePos);
+                if (selectedNode != null && UnitsManager.Instance.units.Any(x => x.Value.CurrentNode == selectedNode))
+                {
+                    if (selectedUnit != null)
+                        selectedUnit.isSelected = false;
+                    SelectUnit(UnitsManager.Instance.units.FirstOrDefault(x => x.Value.CurrentNode == selectedNode).Value);
+                }
+            }
+        }
+    }
+
+    void SelectUnit(UnitController unitToSelect)
+    {
+        unitToSelect.isSelected = true;
+        selectedUnit = unitToSelect;
     }
 
     #region Serialize/Deserialize
@@ -58,7 +84,7 @@ public class PhotonPlayer : MonoBehaviourPun
     #region Init
     void CallInitPhotonPlayer(PhotonPlayer pp)
     {
-        pv.RPC("InitPhotonPlayer", RpcTarget.OthersBuffered, pp);
+        pv.RPC("InitPhotonPlayer", RpcTarget.AllBuffered, pp);
     }
 
     [PunRPC]

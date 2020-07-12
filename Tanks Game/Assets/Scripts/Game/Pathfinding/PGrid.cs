@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PGrid : MonoBehaviour
@@ -65,16 +66,15 @@ public class PGrid : MonoBehaviour
 
     public Node GetNodeFromVector2(Vector2 point)
     {
-        float percentX = (point.x / gridSizeX / 2f) / gridSizeX;
-        float percentY = (point.y / gridSizeY / 2f) / gridSizeY;
-
-        percentX = Mathf.Clamp01(percentX);
-        percentX = Mathf.Clamp01(percentY);
-
-        int x = Mathf.RoundToInt((gridSizeX - 1) * percentX);
-        int y = Mathf.RoundToInt((gridSizeY - 1) * percentY);
+        int x = Mathf.CeilToInt(Mathf.CeilToInt(point.x + Mathf.Abs(min.position.x))) - 1;
+        int y = Mathf.CeilToInt(Mathf.CeilToInt(point.y + Mathf.Abs(min.position.y))) - 1;
 
         return grid[x, y];
+    }
+
+    public bool IsBlockedWithUnit(Node node)
+    {
+        return UnitsManager.Instance.units.Any(x => x.Value.CurrentNode == node);
     }
 
     void OnDrawGizmos()
@@ -87,6 +87,21 @@ public class PGrid : MonoBehaviour
 
                     if (Pathfinding.Instance.currentPath.Contains(grid[x, y]))
                         Gizmos.color = Color.black;
+
+                    // Units.
+                    if (UnitsManager.Instance.units.Count > 0)
+                    {
+                            if (IsBlockedWithUnit(grid[x,y]))
+                                Gizmos.color = Color.green;
+                    }
+
+                    // Selected unit.
+                    if (PhotonRoom.Instance.photonPlayers[0].selectedUnit != null)
+                    {
+                        Node selectedUnitNode = GetNodeFromVector2(PhotonRoom.Instance.photonPlayers[0].selectedUnit.transform.position);
+                        if (selectedUnitNode.gridX == x && selectedUnitNode.gridY == y)
+                            Gizmos.color = Color.cyan;
+                    }
 
                     Gizmos.DrawWireCube(grid[x, y].worldPosition, Vector2.one * 1.9f * nodeRadius);
                 }

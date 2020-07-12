@@ -7,10 +7,9 @@ public class Pathfinding : MonoBehaviour
     #region Singleton
     public static Pathfinding Instance { private set; get; }
     #endregion
-    PGrid grid;
+    [HideInInspector] public PGrid grid;
 
-    public bool isCalculated = false;
-    public List <Node> currentPath = new List<Node>();
+    public List<Node> currentPath = new List<Node>();
 
     void Awake()
     {
@@ -18,19 +17,17 @@ public class Pathfinding : MonoBehaviour
         grid = GetComponent<PGrid>();
     }
 
-    public void FindPath(Vector2 startPos, Vector2 endPos)
+    public List<Node> FindPath(Vector2 startPos, Vector2 endPos)
     {
-        Debug.Log("Calculating path.");
-        isCalculated = false;
         Node startNode = grid.GetNodeFromVector2(startPos);
         Node endNode = grid.GetNodeFromVector2(endPos);
 
-        
+
         List<Node> openList = new List<Node>(); // List with not evaluated nodes.
         HashSet<Node> closedList = new HashSet<Node>();  // List with evaluated nodes.
         openList.Add(startNode);
 
-        while(openList.Count > 0)
+        while (openList.Count > 0)
         {
             Node node = openList[0];
 
@@ -48,18 +45,17 @@ public class Pathfinding : MonoBehaviour
             // If node is end node => form path.
             if (node == endNode)
             {
-                RetracePath(startNode, endNode);
-                return;
+                return RetracePath(startNode, endNode);
             }
 
             // Evaluating and opening all the neighbours of node.
-            foreach(Node neighbour in grid.GetNeighbours(node))
+            foreach (Node neighbour in grid.GetNeighbours(node))
             {
                 if (!neighbour.isWalkable || closedList.Contains(neighbour))
                     continue;
 
                 int newCostToNeighbour = node.gCost + GetDistance(node, neighbour);
-                if(newCostToNeighbour < neighbour.gCost || !openList.Contains(neighbour))
+                if (newCostToNeighbour < neighbour.gCost || !openList.Contains(neighbour))
                 {
                     neighbour.gCost = newCostToNeighbour;
                     neighbour.hCost = GetDistance(neighbour, endNode);
@@ -70,14 +66,17 @@ public class Pathfinding : MonoBehaviour
                 }
             }
         }
+
+        // Impossible to calculate the path.
+        return null;
     }
 
-    void RetracePath(Node startNode, Node endNode)
+    List<Node> RetracePath(Node startNode, Node endNode)
     {
         List<Node> path = new List<Node>();
         Node currentNode = endNode;
 
-        while(currentNode != startNode)
+        while (currentNode != startNode)
         {
             path.Add(currentNode);
             currentNode = currentNode.parent;
@@ -85,8 +84,7 @@ public class Pathfinding : MonoBehaviour
         path.Reverse();
 
         currentPath = path;
-        Debug.LogFormat("Path was calculated with length {0}!", currentPath.Count);
-        isCalculated = true;
+        return path;
     }
 
     int GetDistance(Node nodeA, Node nodeB)

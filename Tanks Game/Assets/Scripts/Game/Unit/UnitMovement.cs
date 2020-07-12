@@ -5,35 +5,28 @@ using UnityEngine;
 
 public class UnitMovement : MonoBehaviour
 {
-    List<Node> path = new List<Node>();
+    public Node currentNode;
+
+    void Start()
+    {
+        currentNode = Pathfinding.Instance.grid.GetNodeFromVector2(transform.position);
+    }
 
     public void StartMovement(Vector2 destination)
     {
-        Pathfinding.Instance.FindPath(transform.position, destination);
+        List<Node> path = Pathfinding.Instance.FindPath(transform.position, destination);
 
-        StartCoroutine(GetPath());
+        if (path != null)
+            StartCoroutine(Movement(Pathfinding.Instance.FindPath(transform.position, destination)));
     }
 
-    IEnumerator GetPath()
+    IEnumerator Movement(List<Node> _path)
     {
-        while (true)
-        {
-            if (Pathfinding.Instance.isCalculated)
-            {
-                path = Pathfinding.Instance.currentPath;
-                StartCoroutine(Movement());
-                break;
-            }
-
-            yield return null;
-        }
-    }
-
-    IEnumerator Movement()
-    {
+        List<Node> path = _path;
         while (path.Count > 0)
         {
-            transform.position = path[0].worldPosition;
+            currentNode = path[0];
+            transform.position = currentNode.worldPosition;
             path.RemoveAt(0);
             yield return new WaitForSeconds(0.25f);
         }

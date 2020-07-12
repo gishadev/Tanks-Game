@@ -211,13 +211,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Owner_ID: -1
-  photonPlayer: {fileID: 0}
+  Unique_ID: -1
   isSelected: 0
+  photonPlayer: {fileID: 0}
   isReadyToShoot: 1
   projPrefab: {fileID: 1716897775920958355, guid: 9cd8380944805bf4eba1225eccf07f66,
     type: 3}
   shootPos: {fileID: 6991600102795006516}
   shootDelay: 1
+  movement: {fileID: 0}
 --- !u!1 &7193151051126137015
 GameObject:
   m_ObjectHideFlags: 0

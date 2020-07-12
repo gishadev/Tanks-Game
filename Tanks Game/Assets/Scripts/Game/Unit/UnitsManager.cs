@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class UnitsManager : MonoBehaviour
 {
@@ -7,6 +8,10 @@ public class UnitsManager : MonoBehaviour
     #endregion 
 
     public UnitsSpawner[] spawners { private set; get; }
+    // Key is Unique_ID.
+    public Dictionary<int, UnitController> units = new Dictionary<int, UnitController>();
+    public List<int> unitsIds = new List<int>();
+
 
     void Awake()
     {
