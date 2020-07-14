@@ -198,6 +198,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4408dec032b69145b9bece806e37056, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementSpeed: 1.25
+  rotationSpeed: 50
 --- !u!114 &7640928378771467921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,12 +215,13 @@ MonoBehaviour:
   Owner_ID: -1
   Unique_ID: -1
   isSelected: 0
-  photonPlayer: {fileID: 0}
+  Owner: {fileID: 0}
   isReadyToShoot: 1
   projPrefab: {fileID: 1716897775920958355, guid: 9cd8380944805bf4eba1225eccf07f66,
     type: 3}
   shootPos: {fileID: 6991600102795006516}
   shootDelay: 1
+  pv: {fileID: 0}
   movement: {fileID: 0}
 --- !u!1 &7193151051126137015
 GameObject:

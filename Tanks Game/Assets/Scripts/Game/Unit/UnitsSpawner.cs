@@ -7,24 +7,16 @@ public class UnitsSpawner : MonoBehaviour
     public PhotonPlayer Owner;
     public Spawnpoint[] spawnpoints;
 
+    // First Spawning of units.
     public void InitUnitsSpawn()
     {
         foreach (Spawnpoint s in spawnpoints)
             SpawnUnit(s);
     }
 
+    // Spawn unit at certain spawnpoint.
     public void SpawnUnit(Spawnpoint spawnpoint)
     {
-        spawnpoint.unit = PhotonNetwork.Instantiate(
-            Path.Combine("Prefabs", "Photon", spawnpoint.unitPrefab.name),
-            spawnpoint.transform.position,
-            Quaternion.identity).GetComponent<UnitController>();
-
-        spawnpoint.unit.Owner_ID = Owner.Id;
-        spawnpoint.unit.Unique_ID = Owner.Id + UnitsManager.Instance.units.Count;
-        UnitsManager.Instance.units.Add(spawnpoint.unit.Unique_ID, spawnpoint.unit);
-        UnitsManager.Instance.unitsIds.Add(spawnpoint.unit.Unique_ID);
-
-        spawnpoint.unitIsDestroyed = false;
+        spawnpoint.Spawn(Owner);
     }
 }

@@ -27,13 +27,13 @@ public class PhotonPlayer : MonoBehaviourPun
             Owner = pv.Owner;
             Id = Owner.ActorNumber;
 
-            unitsSpawner = UnitsManager.Instance.spawners[0];
+            // Adding this photon player to list.
+            CallInitPhotonPlayer(this);
+
+            unitsSpawner = UnitsManager.Instance.spawners[Id - 1];
 
             unitsSpawner.Owner = this;
             unitsSpawner.InitUnitsSpawn();
-
-            // Adding this photon player to list with its controller.
-            CallInitPhotonPlayer(this);
         }
     }
 

@@ -75,7 +75,7 @@ public class PhotonMaster : MonoBehaviourPunCallbacks
             name = _name;
 
         // Setting room options.
-        RoomOptions opt = new RoomOptions() { MaxPlayers = 10, IsOpen = true, IsVisible = true };
+        RoomOptions opt = new RoomOptions() { MaxPlayers = 2, IsOpen = true, IsVisible = true };
         PhotonNetwork.JoinOrCreateRoom(name, opt, TypedLobby.Default);
     }
 

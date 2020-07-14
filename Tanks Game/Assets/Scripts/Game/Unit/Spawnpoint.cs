@@ -10,4 +10,17 @@ public class Spawnpoint : MonoBehaviour
 
     public GameObject unitPrefab;
     public UnitController unit;
+
+    // Initializing spawning.
+    public void Spawn(PhotonPlayer Owner)
+    {
+        unit = PhotonNetwork.Instantiate(
+        Path.Combine("Prefabs", "Photon", unitPrefab.name),
+        transform.position,
+        Quaternion.identity).GetComponent<UnitController>();
+
+        unit.Owner = Owner;
+
+        unitIsDestroyed = false;
+    }
 }

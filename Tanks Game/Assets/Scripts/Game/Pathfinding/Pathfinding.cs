@@ -9,7 +9,7 @@ public class Pathfinding : MonoBehaviour
     #endregion
     [HideInInspector] public PGrid grid;
 
-    public List<Node> currentPath = new List<Node>();
+    //public List<Node> currentPath = new List<Node>();
 
     void Awake()
     {
@@ -83,7 +83,7 @@ public class Pathfinding : MonoBehaviour
         }
         path.Reverse();
 
-        currentPath = path;
+      //  currentPath = path;
         return path;
     }
 

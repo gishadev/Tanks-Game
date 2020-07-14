@@ -85,8 +85,12 @@ public class PGrid : MonoBehaviour
                 {
                     Gizmos.color = grid[x, y].isWalkable ? Color.white : Color.red;
 
-                    if (Pathfinding.Instance.currentPath.Contains(grid[x, y]))
-                        Gizmos.color = Color.black;
+                    // Paths of units.
+                    foreach(UnitController unit in UnitsManager.Instance.units.Values)
+                    {
+                        if (unit.movement.currentPath.Contains(grid[x, y]))
+                            Gizmos.color = Color.black;
+                    }
 
                     // Units.
                     if (UnitsManager.Instance.units.Count > 0)
@@ -98,7 +102,7 @@ public class PGrid : MonoBehaviour
                     // Selected unit.
                     if (PhotonRoom.Instance.photonPlayers[0].selectedUnit != null)
                     {
-                        Node selectedUnitNode = GetNodeFromVector2(PhotonRoom.Instance.photonPlayers[0].selectedUnit.transform.position);
+                        Node selectedUnitNode = PhotonRoom.Instance.photonPlayers[0].selectedUnit.CurrentNode;
                         if (selectedUnitNode.gridX == x && selectedUnitNode.gridY == y)
                             Gizmos.color = Color.cyan;
                     }
