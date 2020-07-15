@@ -2,13 +2,17 @@
 using Photon.Pun;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class UnitController : MonoBehaviour
 {
     public int Owner_ID = -1;
     public int Unique_ID = -1;
     [Space]
-    public bool isSelected;
+
+    public bool isSelected = false;
+    public bool isShootMode = false;
     public PhotonPlayer Owner;
     public Node CurrentNode
     {
@@ -18,8 +22,10 @@ public class UnitController : MonoBehaviour
         }
     }
 
+    public bool IsMoving { get { return !movement.PathIsDone; } }
+
     [Header("Shoot")]
-    public bool isReadyToShoot = true;
+    public GameObject turret;
     public GameObject projPrefab;
     public Transform shootPos;
     public float shootDelay = 2f;
@@ -52,11 +58,15 @@ public class UnitController : MonoBehaviour
     {
         if (pv.IsMine)
         {
-            if (isSelected)
+            if (isSelected && !isShootMode)
             {
                 if (Input.GetMouseButtonDown(0))
                 {
-                    Vector2 destination = cam.ScreenToWorldPoint(Input.mousePosition);
+                    // If player's pointer is on UI element (Button).
+                    if (EventSystem.current.IsPointerOverGameObject())
+                        return;
+
+                    Vector2 destination = GetCursorWorldPosition();
                     if (!Pathfinding.Instance.grid.IsBlockedWithUnit(Pathfinding.Instance.grid.GetNodeFromVector2(destination)) && movement.PathIsDone)
                         pv.RPC("StartUnitMovement", RpcTarget.All, destination);
                 }
@@ -114,54 +124,92 @@ public class UnitController : MonoBehaviour
     {
         movement.StartMovement(destination);
     }
-    //void Update()
-    //{
-    //    if (pv.IsMine)
-    //    {
-    //        if (Input.GetMouseButtonDown(0) && isReadyToShoot)
-    //        {
-    //            CallShoot();
-    //            isReadyToShoot = false;
-    //            StartCoroutine(Delay());
-    //        }
-    //    }
-    //}
 
-    //void CallShoot()
-    //{
-    //    pv.RPC("Shoot", RpcTarget.All, Time.time, shootPos.up, Id);
-    //    animator.SetBool("Shoot", true);
-    //}
+    #region Shoot
+    public void StartShootMode()
+    {
+        isShootMode = true;
+        StartCoroutine(ShootMode());
+        UIManager.Instance.HideShootBtn();
+    }
 
-    //[PunRPC]
-    //void Shoot(float time, Vector3 up, int ownerId)
-    //{
-    //    float latency = time / Time.time;
-    //    Vector2 position = shootPos.position - (-up * latency) - up;
+    public void ExitShootMode()
+    {
+        isShootMode = false;
+        StartCoroutine(ReturnTurretToInitState());
+        UIManager.Instance.ShowShootBtn();
+    }
 
-    //    Projectile proj = Instantiate(projPrefab, position, shootPos.rotation).GetComponent<Projectile>();
-    //    proj.ownerId = ownerId;
+    IEnumerator ShootMode()
+    {
+        while (isShootMode)
+        {
+            // Turret turning.
+            Vector2 cursorPos = GetCursorWorldPosition() - (Vector2)transform.position;
+            float rotZ = Mathf.Atan2(cursorPos.y, cursorPos.x) * Mathf.Rad2Deg - 90f;
+            turret.transform.rotation = Quaternion.Euler(Vector3.forward * rotZ);
 
-    //    Debug.Log("latency: " + latency);
-    //}
+            if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+            {
+                CallShoot(rotZ);
+                ExitShootMode();
+                break;
+            }
 
-    //// For Animator.
-    //public void SetShootToFalse()
-    //{
-    //    animator.SetBool("Shoot", false);
-    //}
+            yield return null;
+        }
+    }
 
-    //IEnumerator Delay()
-    //{
-    //    while (isReadyToShoot == false)
-    //    {
-    //        yield return new WaitForSeconds(shootDelay);
-    //        isReadyToShoot = true;
-    //    }
-    //}
+    IEnumerator ReturnTurretToInitState()
+    {
+        Debug.Log(turret.transform.rotation.eulerAngles + " " + transform.rotation.eulerAngles);
+        while (turret.transform.rotation != transform.rotation)
+        {
+            turret.transform.rotation = Quaternion.RotateTowards(turret.transform.rotation, transform.rotation, movement.rotationSpeed * Time.deltaTime);
+            yield return null;
+        }
+    }
 
-    //public void TakeDamage()
-    //{
-    //    photonPlayer.CallDie();
-    //}
+    void CallShoot(float rotZ)
+    {
+        pv.RPC("Shoot", RpcTarget.All, rotZ, Unique_ID);
+        animator.SetBool("Shoot", true);
+    }
+    [PunRPC]
+    void Shoot(float rotZ, int ownerId)
+    {
+        turret.transform.rotation = Quaternion.Euler(Vector3.forward * rotZ);
+
+        Projectile proj = Instantiate(projPrefab, shootPos.position, shootPos.rotation).GetComponent<Projectile>();
+        proj.ownerId = ownerId;
+    }
+
+    // For Animator.
+    public void SetShootToFalse()
+    {
+        animator.SetBool("Shoot", false);
+    }
+    #endregion
+
+    public void TakeDamage()
+    {
+        Die();
+    }
+
+    void Die()
+    {
+        // Collections managment.
+        int index = UnitsManager.Instance.unitsIds.FindIndex(x => x == Unique_ID);
+        if (index != -1)
+            UnitsManager.Instance.unitsIds.RemoveAt(index);
+        UnitsManager.Instance.units.Remove(Unique_ID);
+
+        // Destroying.
+        Destroy(gameObject);
+    }
+
+    Vector2 GetCursorWorldPosition()
+    {
+        return cam.ScreenToWorldPoint(Input.mousePosition);
+    }
 }

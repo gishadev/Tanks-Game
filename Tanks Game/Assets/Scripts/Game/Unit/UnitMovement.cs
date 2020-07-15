@@ -6,14 +6,20 @@ using UnityEngine;
 
 public class UnitMovement : MonoBehaviour
 {
-    [SerializeField] private float movementSpeed = 1.5f;
-    [SerializeField] private float rotationSpeed = 15f;
+    public float movementSpeed = 1.5f;
+    public float rotationSpeed = 15f;
     public Node currentNode { private set; get; }
 
     Vector2 lookDirection { get { return transform.TransformDirection(Vector2.up); } }
 
     public List<Node> currentPath = new List<Node>();
 
+    Animator animator;
+
+    void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     void Start()
     {
@@ -72,15 +78,17 @@ public class UnitMovement : MonoBehaviour
 
     IEnumerator MoveTowardsNextNode(Node nextNode)
     {
+        animator.SetBool("Moving", true);
         while (!IsCompletedMoveToNext)
         {
             if (Vector2.Distance(transform.position, nextNode.worldPosition) == 0)
             {
                 currentNode = nextNode;
                 IsCompletedMoveToNext = true;
+                animator.SetBool("Moving", false);
                 break;
             }
-
+            
             transform.position = Vector2.MoveTowards(transform.position, nextNode.worldPosition, Time.deltaTime * movementSpeed);
 
             yield return null;

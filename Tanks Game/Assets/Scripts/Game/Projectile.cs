@@ -27,15 +27,15 @@ public class Projectile : MonoBehaviourPun
 
         if (hitInfo.collider != null)
         {
-            //if (hitInfo.collider.CompareTag("Player"))
-            //{
-            //    PlayerController controller = hitInfo.collider.GetComponentInParent<PlayerController>();
+            if (hitInfo.collider.CompareTag("Player"))
+            {
+                UnitController controller = hitInfo.collider.GetComponentInParent<UnitController>();
 
-            //    if (ownerId == controller.Id)
-            //        return;
-            //    else
-            //        controller.TakeDamage();
-            //}
+                if (ownerId == controller.Unique_ID)
+                    return;
+                //else
+                //    controller.TakeDamage();
+            }
             DestroyProj();
         }
 

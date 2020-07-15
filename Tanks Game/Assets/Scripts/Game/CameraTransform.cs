@@ -19,7 +19,6 @@ public class CameraTransform : MonoBehaviour
         width = cam.orthographicSize * (float)Screen.width / Screen.height;
         height = cam.orthographicSize;
     }
-
     void Update()
     {
 
@@ -31,6 +30,4 @@ public class CameraTransform : MonoBehaviour
             Mathf.Clamp(transform.position.y, b_Min.position.y + height, b_Max.position.x - height),
             -10f);
     }
-
-
 }

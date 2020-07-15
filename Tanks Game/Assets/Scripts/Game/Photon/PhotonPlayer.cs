@@ -26,7 +26,7 @@ public class PhotonPlayer : MonoBehaviourPun
         {
             Owner = pv.Owner;
             Id = Owner.ActorNumber;
-
+            GameManager.Instance.myPP = this;
             // Adding this photon player to list.
             CallInitPhotonPlayer(this);
 

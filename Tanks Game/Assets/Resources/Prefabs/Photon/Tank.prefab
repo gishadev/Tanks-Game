@@ -215,8 +215,9 @@ MonoBehaviour:
   Owner_ID: -1
   Unique_ID: -1
   isSelected: 0
+  isShootMode: 0
   Owner: {fileID: 0}
-  isReadyToShoot: 1
+  turret: {fileID: 1543103344886857075}
   projPrefab: {fileID: 1716897775920958355, guid: 9cd8380944805bf4eba1225eccf07f66,
     type: 3}
   shootPos: {fileID: 6991600102795006516}
