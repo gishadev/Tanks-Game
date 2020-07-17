@@ -15,7 +15,6 @@ public class UnitMovement : MonoBehaviour
     public List<Node> currentPath = new List<Node>();
 
     Animator animator;
-
     void Awake()
     {
         animator = GetComponent<Animator>();

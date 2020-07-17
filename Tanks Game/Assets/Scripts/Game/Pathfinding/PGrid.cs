@@ -88,7 +88,7 @@ public class PGrid : MonoBehaviour
                     // Paths of units.
                     foreach(UnitController unit in UnitsManager.Instance.units.Values)
                     {
-                        if (unit.movement.currentPath.Contains(grid[x, y]))
+                        if (unit.Movement.currentPath.Contains(grid[x, y]))
                             Gizmos.color = Color.black;
                     }
 

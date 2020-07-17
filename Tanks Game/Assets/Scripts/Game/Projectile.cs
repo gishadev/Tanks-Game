@@ -33,8 +33,8 @@ public class Projectile : MonoBehaviourPun
 
                 if (ownerId == controller.Unique_ID)
                     return;
-                //else
-                //    controller.TakeDamage();
+                else
+                    controller.TakeDamage();
             }
             DestroyProj();
         }

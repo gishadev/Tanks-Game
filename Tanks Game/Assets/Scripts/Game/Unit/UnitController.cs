@@ -10,20 +10,31 @@ public class UnitController : MonoBehaviour
     public int Owner_ID = -1;
     public int Unique_ID = -1;
     [Space]
-
     public bool isSelected = false;
     public bool isShootMode = false;
     public PhotonPlayer Owner;
-    public Node CurrentNode
+    public bool IsMoving { get { return !movement.PathIsDone; } }
+
+    [Header("Health")]
+    [SerializeField] private int nowHealth = 3;
+    [SerializeField] private int maxHealth = 3;
+    public int Health
     {
-        get
+        get { return nowHealth; }
+        set
         {
-            return movement.currentNode;
+            if (value > maxHealth)
+                nowHealth = maxHealth;
+            else if (value <= 0)
+                nowHealth = 0;
+            else
+                nowHealth = value;
+
+            healthBar.UpdatePercentage(nowHealth, maxHealth);
         }
     }
 
-    public bool IsMoving { get { return !movement.PathIsDone; } }
-
+    public HealthBar healthBar;
     [Header("Shoot")]
     public GameObject turret;
     public GameObject projPrefab;
@@ -31,9 +42,20 @@ public class UnitController : MonoBehaviour
     public float shootDelay = 2f;
 
     public PhotonView pv;
+
     Animator animator;
-    [HideInInspector] public UnitMovement movement;
+    UnitMovement movement;
     Camera cam;
+
+    public UnitMovement Movement { get { return movement; } }
+
+    public Node CurrentNode
+    {
+        get
+        {
+            return movement.currentNode;
+        }
+    }
 
     void Awake()
     {
@@ -48,6 +70,7 @@ public class UnitController : MonoBehaviour
 
     void Start()
     {
+        UIManager.Instance.SpawnUnitHealthBar(this);
         if (pv.IsMine)
         {
             InitUnitController();
@@ -133,11 +156,11 @@ public class UnitController : MonoBehaviour
         UIManager.Instance.HideShootBtn();
     }
 
-    public void ExitShootMode()
+    public void CancelShootMode()
     {
         isShootMode = false;
-        StartCoroutine(ReturnTurretToInitState());
         UIManager.Instance.ShowShootBtn();
+        StartCoroutine(ReturnTurretToInitState());
     }
 
     IEnumerator ShootMode()
@@ -152,7 +175,8 @@ public class UnitController : MonoBehaviour
             if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
             {
                 CallShoot(rotZ);
-                ExitShootMode();
+                UIManager.Instance.ShowShootBtn();
+                isShootMode = false;
                 break;
             }
 
@@ -162,7 +186,6 @@ public class UnitController : MonoBehaviour
 
     IEnumerator ReturnTurretToInitState()
     {
-        Debug.Log(turret.transform.rotation.eulerAngles + " " + transform.rotation.eulerAngles);
         while (turret.transform.rotation != transform.rotation)
         {
             turret.transform.rotation = Quaternion.RotateTowards(turret.transform.rotation, transform.rotation, movement.rotationSpeed * Time.deltaTime);
@@ -182,6 +205,7 @@ public class UnitController : MonoBehaviour
 
         Projectile proj = Instantiate(projPrefab, shootPos.position, shootPos.rotation).GetComponent<Projectile>();
         proj.ownerId = ownerId;
+        StartCoroutine(ReturnTurretToInitState());
     }
 
     // For Animator.
@@ -193,7 +217,10 @@ public class UnitController : MonoBehaviour
 
     public void TakeDamage()
     {
-        Die();
+        Health--;
+
+        if (Health == 0)
+            Die();
     }
 
     void Die()
@@ -205,6 +232,7 @@ public class UnitController : MonoBehaviour
         UnitsManager.Instance.units.Remove(Unique_ID);
 
         // Destroying.
+        Destroy(healthBar.gameObject);
         Destroy(gameObject);
     }
 

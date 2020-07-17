@@ -50,7 +50,11 @@ public class PhotonPlayer : MonoBehaviourPun
                 {
                     if (selectedUnit != null)
                         selectedUnit.isSelected = false;
-                    SelectUnit(UnitsManager.Instance.units.FirstOrDefault(x => x.Value.CurrentNode == selectedNode).Value);
+
+                    // If potential unit is mine => select.
+                    UnitController potentialUnit = UnitsManager.Instance.units.FirstOrDefault(x => x.Value.CurrentNode == selectedNode).Value;
+                    if (potentialUnit.Owner_ID == Id)
+                        SelectUnit(potentialUnit);
                 }
             }
         }
