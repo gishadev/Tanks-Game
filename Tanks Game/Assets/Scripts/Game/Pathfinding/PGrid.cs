@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
 public class PGrid : MonoBehaviour
 {
     public Transform min, max;
     public LayerMask nonWalkableLayer;
     public float nodeRadius = 0.5f;
 
-    int gridSizeX, gridSizeY;
+    [HideInInspector] public int gridSizeX;
+    [HideInInspector] public int gridSizeY;
     float nodeDiameter;
 
-    Node[,] grid;
+    public Node[,] grid;
+    public VisualGrid visual;
 
     void Awake()
     {
@@ -20,6 +21,7 @@ public class PGrid : MonoBehaviour
         gridSizeY = Mathf.RoundToInt(Mathf.Abs(min.position.y) + Mathf.Abs(max.position.y));
 
         CreateGrid();
+        visual.CreateGrid(this);
     }
 
     void CreateGrid()
@@ -86,7 +88,7 @@ public class PGrid : MonoBehaviour
                     Gizmos.color = grid[x, y].isWalkable ? Color.white : Color.red;
 
                     // Paths of units.
-                    foreach(UnitController unit in UnitsManager.Instance.units.Values)
+                    foreach (UnitController unit in UnitsManager.Instance.units.Values)
                     {
                         if (unit.Movement.currentPath.Contains(grid[x, y]))
                             Gizmos.color = Color.black;
@@ -95,8 +97,8 @@ public class PGrid : MonoBehaviour
                     // Units.
                     if (UnitsManager.Instance.units.Count > 0)
                     {
-                            if (IsBlockedWithUnit(grid[x,y]))
-                                Gizmos.color = Color.green;
+                        if (IsBlockedWithUnit(grid[x, y]))
+                            Gizmos.color = Color.green;
                     }
 
                     // Selected unit.

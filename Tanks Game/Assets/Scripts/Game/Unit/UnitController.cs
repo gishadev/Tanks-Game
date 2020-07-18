@@ -90,7 +90,7 @@ public class UnitController : MonoBehaviour
                         return;
 
                     Vector2 destination = GetCursorWorldPosition();
-                    if (!Pathfinding.Instance.grid.IsBlockedWithUnit(Pathfinding.Instance.grid.GetNodeFromVector2(destination)) && movement.PathIsDone)
+                    if (!Pathfinding.Instance.gridComponent.IsBlockedWithUnit(Pathfinding.Instance.gridComponent.GetNodeFromVector2(destination)) && movement.PathIsDone)
                         pv.RPC("StartUnitMovement", RpcTarget.All, destination);
                 }
             }

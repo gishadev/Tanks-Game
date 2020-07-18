@@ -45,7 +45,7 @@ public class PhotonPlayer : MonoBehaviourPun
             if (Input.GetMouseButtonDown(0))
             {
                 Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                Node selectedNode = Pathfinding.Instance.grid.GetNodeFromVector2(mousePos);
+                Node selectedNode = Pathfinding.Instance.gridComponent.GetNodeFromVector2(mousePos);
                 if (selectedNode != null && UnitsManager.Instance.units.Any(x => x.Value.CurrentNode == selectedNode))
                 {
                     if (selectedUnit != null)
@@ -54,7 +54,11 @@ public class PhotonPlayer : MonoBehaviourPun
                     // If potential unit is mine => select.
                     UnitController potentialUnit = UnitsManager.Instance.units.FirstOrDefault(x => x.Value.CurrentNode == selectedNode).Value;
                     if (potentialUnit.Owner_ID == Id)
+                    {
                         SelectUnit(potentialUnit);
+                        Pathfinding.Instance.gridComponent.visual.ShowGrid(potentialUnit.CurrentNode);
+                    }
+                        
                 }
             }
         }
@@ -64,6 +68,7 @@ public class PhotonPlayer : MonoBehaviourPun
     {
         unitToSelect.isSelected = true;
         selectedUnit = unitToSelect;
+        //Pathfinding.Instance.
     }
 
     #region Serialize/Deserialize

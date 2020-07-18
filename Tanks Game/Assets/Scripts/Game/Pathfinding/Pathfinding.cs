@@ -7,21 +7,24 @@ public class Pathfinding : MonoBehaviour
     #region Singleton
     public static Pathfinding Instance { private set; get; }
     #endregion
-    [HideInInspector] public PGrid grid;
+
+    public int movementRadius;
+
+    [HideInInspector] public PGrid gridComponent;
+
 
     //public List<Node> currentPath = new List<Node>();
 
     void Awake()
     {
         Instance = this;
-        grid = GetComponent<PGrid>();
+        gridComponent = GetComponent<PGrid>();
     }
 
     public List<Node> FindPath(Vector2 startPos, Vector2 endPos)
     {
-        Node startNode = grid.GetNodeFromVector2(startPos);
-        Node endNode = grid.GetNodeFromVector2(endPos);
-
+        Node startNode = gridComponent.GetNodeFromVector2(startPos);
+        Node endNode = gridComponent.GetNodeFromVector2(endPos);
 
         List<Node> openList = new List<Node>(); // List with not evaluated nodes.
         HashSet<Node> closedList = new HashSet<Node>();  // List with evaluated nodes.
@@ -49,7 +52,7 @@ public class Pathfinding : MonoBehaviour
             }
 
             // Evaluating and opening all the neighbours of node.
-            foreach (Node neighbour in grid.GetNeighbours(node))
+            foreach (Node neighbour in gridComponent.GetNeighbours(node))
             {
                 if (!neighbour.isWalkable || closedList.Contains(neighbour))
                     continue;
@@ -83,7 +86,7 @@ public class Pathfinding : MonoBehaviour
         }
         path.Reverse();
 
-      //  currentPath = path;
+        //  currentPath = path;
         return path;
     }
 
@@ -96,5 +99,30 @@ public class Pathfinding : MonoBehaviour
             return 14 * dstY + 10 * (dstX - dstY);
 
         return 14 * dstX + 10 * (dstY - dstX);
+    }
+
+    public List<Node> CalculateAvailableArea(Node center)
+    {
+        List<Node> result = new List<Node>();
+
+        for (int x = -movementRadius; x <= movementRadius; x++)
+            for (int y = -movementRadius; y <= movementRadius; y++)
+            {
+                int checkX = center.gridX + x;
+                int checkY = center.gridY + y;
+
+                // Skipping center node.
+                if (checkX == center.gridX && checkY == center.gridY)
+                    continue;
+
+                if (checkX > 0 && checkX < gridComponent.gridSizeX && checkY > 0 && checkY < gridComponent.gridSizeY)
+                {
+                    Node checkNode = gridComponent.grid[checkX, checkY];
+
+                    if (checkNode.isWalkable && GetDistance(checkNode, center) <= movementRadius * 10)
+                        result.Add(checkNode);
+                }
+            }
+        return result;
     }
 }

@@ -22,7 +22,7 @@ public class UnitMovement : MonoBehaviour
 
     void Start()
     {
-        currentNode = Pathfinding.Instance.grid.GetNodeFromVector2(transform.position);
+        currentNode = Pathfinding.Instance.gridComponent.GetNodeFromVector2(transform.position);
     }
 
     //void Update()
