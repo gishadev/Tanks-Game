@@ -3,6 +3,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using System.Linq;
+using System.Collections.Generic;
 
 public class PhotonPlayer : MonoBehaviourPun
 {
@@ -10,7 +11,8 @@ public class PhotonPlayer : MonoBehaviourPun
     public Player Owner { private set; get; }
     public PhotonView pv { private set; get; }
 
-    public UnitController selectedUnit;
+    public List<UnitController> myUnits = new List<UnitController>();
+    public UnitController SelectedUnit { private set; get; }
 
     private UnitsSpawner unitsSpawner;
 
@@ -18,10 +20,7 @@ public class PhotonPlayer : MonoBehaviourPun
     {
         PhotonPeer.RegisterType(typeof(PhotonPlayer), (byte)'L', SerializePhotonPlayer, DeserializePhotonPlayer);
         pv = GetComponent<PhotonView>();
-    }
 
-    void Start()
-    {
         if (pv.IsMine)
         {
             Owner = pv.Owner;
@@ -30,45 +29,48 @@ public class PhotonPlayer : MonoBehaviourPun
             // Adding this photon player to list.
             CallInitPhotonPlayer(this);
 
+            // Setting Units Spawner.
             unitsSpawner = UnitsManager.Instance.spawners[Id - 1];
-
             unitsSpawner.Owner = this;
             unitsSpawner.InitUnitsSpawn();
         }
     }
 
-    void Update()
-    {
-        if (pv.IsMine)
-        {
-            // Unit selection.
-            if (Input.GetMouseButtonDown(0))
-            {
-                Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                Node selectedNode = Pathfinding.Instance.gridComponent.GetNodeFromVector2(mousePos);
-                if (selectedNode != null && UnitsManager.Instance.units.Any(x => x.Value.CurrentNode == selectedNode))
-                {
-                    if (selectedUnit != null)
-                        selectedUnit.isSelected = false;
+    //void Update()
+    //{
+    //    if (pv.IsMine)
+    //    {
+    //        // Unit selection.
+    //        if (Input.GetMouseButtonDown(0))
+    //        {
+    //            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    //            Node selectedNode = Pathfinding.Instance.gridComponent.GetNodeFromVector2(mousePos);
+    //            if (selectedNode != null && UnitsManager.Instance.units.Any(x => x.Value.CurrentNode == selectedNode))
+    //            {
+    //                if (selectedUnit != null)
+    //                    selectedUnit.isSelected = false;
 
-                    // If potential unit is mine => select.
-                    UnitController potentialUnit = UnitsManager.Instance.units.FirstOrDefault(x => x.Value.CurrentNode == selectedNode).Value;
-                    if (potentialUnit.Owner_ID == Id)
-                    {
-                        SelectUnit(potentialUnit);
-                        Pathfinding.Instance.gridComponent.visual.ShowGrid(potentialUnit.CurrentNode);
-                    }
+    //                // If potential unit is mine => select.
+    //                UnitController potentialUnit = UnitsManager.Instance.units.FirstOrDefault(x => x.Value.CurrentNode == selectedNode).Value;
+    //                if (potentialUnit.Owner_ID == Id)
+    //                {
+    //                    SelectUnit(potentialUnit);
+    //                    Pathfinding.Instance.gridComponent.visual.ShowGrid(potentialUnit.CurrentNode);
+    //                }
                         
-                }
-            }
-        }
-    }
+    //            }
+    //        }
+    //    }
+    //}
 
-    void SelectUnit(UnitController unitToSelect)
+    public void SelectUnit(UnitController unitToSelect)
     {
+        if (SelectedUnit != null)
+            SelectedUnit.isSelected = false;
+
         unitToSelect.isSelected = true;
-        selectedUnit = unitToSelect;
-        //Pathfinding.Instance.
+        SelectedUnit = unitToSelect;
+        Pathfinding.Instance.gridComponent.visual.ShowGrid(SelectedUnit.CurrentNode);
     }
 
     #region Serialize/Deserialize

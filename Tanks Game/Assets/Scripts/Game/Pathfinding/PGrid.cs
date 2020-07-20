@@ -102,9 +102,9 @@ public class PGrid : MonoBehaviour
                     }
 
                     // Selected unit.
-                    if (PhotonRoom.Instance.photonPlayers[0].selectedUnit != null)
+                    if (PhotonRoom.Instance.photonPlayers[0].SelectedUnit != null)
                     {
-                        Node selectedUnitNode = PhotonRoom.Instance.photonPlayers[0].selectedUnit.CurrentNode;
+                        Node selectedUnitNode = PhotonRoom.Instance.photonPlayers[0].SelectedUnit.CurrentNode;
                         if (selectedUnitNode.gridX == x && selectedUnitNode.gridY == y)
                             Gizmos.color = Color.cyan;
                     }

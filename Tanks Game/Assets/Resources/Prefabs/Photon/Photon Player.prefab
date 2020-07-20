@@ -67,4 +67,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Id: 0
-  selectedUnit: {fileID: 0}
+  myUnits: []

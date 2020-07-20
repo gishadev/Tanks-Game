@@ -7,12 +7,13 @@ using UnityEngine.UI;
 
 public class UnitController : MonoBehaviour
 {
+    public string Name;
+    [Space]
     public int Owner_ID = -1;
     public int Unique_ID = -1;
     [Space]
     public bool isSelected = false;
     public bool isShootMode = false;
-    public PhotonPlayer Owner;
     public bool IsMoving { get { return !movement.PathIsDone; } }
 
     [Header("Health")]
@@ -54,6 +55,21 @@ public class UnitController : MonoBehaviour
         get
         {
             return movement.currentNode;
+        }
+    }
+
+    public PhotonPlayer Owner
+    {
+        get
+        {
+            int index = PhotonRoom.Instance.photonPlayers.FindIndex(x => x.Id == Owner_ID);
+            if (index != -1)
+                return PhotonRoom.Instance.photonPlayers[index];
+            else
+            {
+                Debug.LogError("Photon Player was not found!");
+                return null;
+            }  
         }
     }
 
@@ -122,7 +138,6 @@ public class UnitController : MonoBehaviour
     void InitUnitController()
     {
         // Client Side data of the unit.
-        Owner_ID = Owner.Id;
         Unique_ID = pv.InstantiationId;
         UnitsManager.Instance.units.Add(Unique_ID, this);
         UnitsManager.Instance.unitsIds.Add(Unique_ID);
@@ -205,6 +220,7 @@ public class UnitController : MonoBehaviour
 
         Projectile proj = Instantiate(projPrefab, shootPos.position, shootPos.rotation).GetComponent<Projectile>();
         proj.ownerId = ownerId;
+        TurnsController.Instance.Next();
         StartCoroutine(ReturnTurretToInitState());
     }
 
@@ -229,7 +245,9 @@ public class UnitController : MonoBehaviour
         int index = UnitsManager.Instance.unitsIds.FindIndex(x => x == Unique_ID);
         if (index != -1)
             UnitsManager.Instance.unitsIds.RemoveAt(index);
+
         UnitsManager.Instance.units.Remove(Unique_ID);
+        Owner.myUnits.Remove(this);
 
         // Destroying.
         Destroy(healthBar.gameObject);

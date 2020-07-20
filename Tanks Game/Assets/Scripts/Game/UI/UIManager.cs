@@ -12,14 +12,36 @@ public class UIManager : MonoBehaviour
     [Space]
     public Transform healthBarsParent;
     public GameObject unitHealthBar;
+    [Space]
+    public GameObject spectatorModeBtn;
+    public GameObject followerModeBtn;
     void Awake()
     {
         Instance = this;
     }
 
+    public void onClick_EndTurn()
+    {
+        TurnsController.Instance.Next();
+    }
+
+    public void onClick_ToSpectatorMode()
+    {
+        FindObjectOfType<CameraTransform>().isSpectatorMode = true;
+        spectatorModeBtn.SetActive(true);
+        followerModeBtn.SetActive(false);
+    }
+
+    public void onClick_ToFollowerMode()
+    {
+        FindObjectOfType<CameraTransform>().isSpectatorMode = false;
+        spectatorModeBtn.SetActive(false);
+        followerModeBtn.SetActive(true);
+    }
+
     public void onClick_Shoot()
     {
-        UnitController selectedUnit = GameManager.Instance.myPP.selectedUnit;
+        UnitController selectedUnit = GameManager.Instance.myPP.SelectedUnit;
         if (selectedUnit != null)
         {
             if (!selectedUnit.IsMoving)
@@ -29,7 +51,7 @@ public class UIManager : MonoBehaviour
 
     public void onClick_CancelShoot()
     {
-        UnitController selectedUnit = GameManager.Instance.myPP.selectedUnit;
+        UnitController selectedUnit = GameManager.Instance.myPP.SelectedUnit;
         if (selectedUnit != null)
             selectedUnit.CancelShootMode();
     }

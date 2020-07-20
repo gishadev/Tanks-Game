@@ -18,11 +18,16 @@ public class UnitMovement : MonoBehaviour
     void Awake()
     {
         animator = GetComponent<Animator>();
+
+        currentNode = Pathfinding.Instance.gridComponent.GetNodeFromVector2(transform.position);
     }
 
-    void Start()
+    void Update()
     {
-        currentNode = Pathfinding.Instance.gridComponent.GetNodeFromVector2(transform.position);
+        if (!GetComponent<UnitController>().isSelected)
+        {
+            StopMovement();
+        }
     }
 
     //void Update()
@@ -33,10 +38,23 @@ public class UnitMovement : MonoBehaviour
 
     public void StartMovement(Vector2 destination)
     {
+        Pathfinding.Instance.gridComponent.visual.HideGrid();
+
         List<Node> path = Pathfinding.Instance.FindPath(transform.position, destination);
 
         if (path != null)
             StartCoroutine(Movement(Pathfinding.Instance.FindPath(transform.position, destination)));
+    }
+
+    void StopMovement()
+    {
+        currentPath.Clear();
+        animator.SetBool("Moving", false);
+
+        IsCompletedMoveToNext = true;
+        IsCompletedRotationToNext = true;
+
+        transform.position = currentNode.worldPosition;
     }
 
     bool IsCompletedMoveToNext = false;
@@ -80,14 +98,16 @@ public class UnitMovement : MonoBehaviour
         animator.SetBool("Moving", true);
         while (!IsCompletedMoveToNext)
         {
+            // Stop movement.
             if (Vector2.Distance(transform.position, nextNode.worldPosition) == 0)
             {
                 currentNode = nextNode;
                 IsCompletedMoveToNext = true;
                 animator.SetBool("Moving", false);
+                Pathfinding.Instance.gridComponent.visual.HideGrid();
                 break;
             }
-            
+
             transform.position = Vector2.MoveTowards(transform.position, nextNode.worldPosition, Time.deltaTime * movementSpeed);
 
             yield return null;

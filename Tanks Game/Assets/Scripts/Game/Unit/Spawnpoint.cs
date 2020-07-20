@@ -19,7 +19,8 @@ public class Spawnpoint : MonoBehaviour
         transform.position,
         Quaternion.identity).GetComponent<UnitController>();
 
-        unit.Owner = Owner;
+        unit.Owner_ID = Owner.Id;
+        Owner.myUnits.Add(unit);
 
         unitIsDestroyed = false;
     }

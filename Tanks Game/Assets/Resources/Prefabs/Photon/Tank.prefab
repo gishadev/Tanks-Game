@@ -212,11 +212,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c49a76840d2d52489458f6b02d164ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Name: Tank
   Owner_ID: -1
   Unique_ID: -1
   isSelected: 0
   isShootMode: 0
-  Owner: {fileID: 0}
   nowHealth: 3
   maxHealth: 3
   healthBar: {fileID: 0}

@@ -11,12 +11,14 @@ public class UnitsSpawner : MonoBehaviour
     public void InitUnitsSpawn()
     {
         foreach (Spawnpoint s in spawnpoints)
-            SpawnUnit(s);
+        {
+            s.Spawn(Owner);
+        }
     }
 
-    // Spawn unit at certain spawnpoint.
-    public void SpawnUnit(Spawnpoint spawnpoint)
-    {
-        spawnpoint.Spawn(Owner);
-    }
+    //// Spawn unit at certain spawnpoint.
+    //public void SpawnUnit(Spawnpoint spawnpoint)
+    //{
+    //    spawnpoint.Spawn(Owner);
+    //}
 }
