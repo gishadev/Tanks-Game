@@ -1,7 +1,5 @@
-﻿using Photon.Pun;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class UnitMovement : MonoBehaviour
@@ -30,24 +28,22 @@ public class UnitMovement : MonoBehaviour
         }
     }
 
-    //void Update()
-    //{
-    //    Debug.DrawRay(transform.position, GetDirectionToTarget(currentNode.worldPosition) * 10f, Color.red);
-    //    Debug.DrawRay(transform.position, lookDirection * 10f, Color.green);
-    //}
-
     public void StartMovement(Vector2 destination)
     {
-        Pathfinding.Instance.gridComponent.visual.HideGrid();
-
         List<Node> path = Pathfinding.Instance.FindPath(transform.position, destination);
+        if (path == null)
+            return;
 
-        if (path != null)
-            StartCoroutine(Movement(Pathfinding.Instance.FindPath(transform.position, destination)));
+        Pathfinding.Instance.gridComponent.visual.HideGrid();
+        StartCoroutine(Movement(Pathfinding.Instance.FindPath(transform.position, destination)));
+        UIManager.Instance.ResetButtons();
+        UIManager.Instance.BlockButtons();
     }
 
+    // Stopping movement when unit isn't selected.
     void StopMovement()
     {
+        StopAllCoroutines();
         currentPath.Clear();
         animator.SetBool("Moving", false);
 
@@ -91,6 +87,7 @@ public class UnitMovement : MonoBehaviour
             currentPath.RemoveAt(0);
             yield return null;
         }
+        UIManager.Instance.ResetButtons();
     }
 
     IEnumerator MoveTowardsNextNode(Node nextNode)
@@ -98,13 +95,13 @@ public class UnitMovement : MonoBehaviour
         animator.SetBool("Moving", true);
         while (!IsCompletedMoveToNext)
         {
-            // Stop movement.
+            // Stop movement to next node.
             if (Vector2.Distance(transform.position, nextNode.worldPosition) == 0)
             {
                 currentNode = nextNode;
                 IsCompletedMoveToNext = true;
                 animator.SetBool("Moving", false);
-                Pathfinding.Instance.gridComponent.visual.HideGrid();
+                Pathfinding.Instance.gridComponent.UpdateGrid();
                 break;
             }
 

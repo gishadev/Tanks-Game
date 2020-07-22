@@ -3,8 +3,6 @@ using Photon.Pun;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
-
 public class UnitController : MonoBehaviour
 {
     public string Name;
@@ -14,8 +12,10 @@ public class UnitController : MonoBehaviour
     [Space]
     public bool isSelected = false;
     public bool isShootMode = false;
-    public bool IsMoving { get { return !movement.PathIsDone; } }
-
+    public bool isMoveMode = false;
+    public bool IsMoving { get { return !Movement.PathIsDone; } }
+    [Space]
+    public GameObject selectedMarker;
     [Header("Health")]
     [SerializeField] private int nowHealth = 3;
     [SerializeField] private int maxHealth = 3;
@@ -36,7 +36,7 @@ public class UnitController : MonoBehaviour
     }
 
     public HealthBar healthBar;
-    [Header("Shoot")]
+    [Header("Shoot Mode")]
     public GameObject turret;
     public GameObject projPrefab;
     public Transform shootPos;
@@ -54,7 +54,7 @@ public class UnitController : MonoBehaviour
     {
         get
         {
-            return movement.currentNode;
+            return Movement.currentNode;
         }
     }
 
@@ -97,7 +97,7 @@ public class UnitController : MonoBehaviour
     {
         if (pv.IsMine)
         {
-            if (isSelected && !isShootMode)
+            if (isSelected && !isShootMode && isMoveMode)
             {
                 if (Input.GetMouseButtonDown(0))
                 {
@@ -105,9 +105,12 @@ public class UnitController : MonoBehaviour
                     if (EventSystem.current.IsPointerOverGameObject())
                         return;
 
-                    Vector2 destination = GetCursorWorldPosition();
-                    if (!Pathfinding.Instance.gridComponent.IsBlockedWithUnit(Pathfinding.Instance.gridComponent.GetNodeFromVector2(destination)) && movement.PathIsDone)
-                        pv.RPC("StartUnitMovement", RpcTarget.All, destination);
+                    Node destinationNode = Pathfinding.Instance.gridComponent.GetNodeFromVector2(GetCursorWorldPosition());
+                    // Unit can move in certain radius around it.
+                    bool isInAvailableArea = Pathfinding.Instance.CalculateAvailableArea(CurrentNode).Contains(destinationNode);
+
+                    if (!IsMoving && isInAvailableArea)
+                        pv.RPC("StartUnitMovement", RpcTarget.All, destinationNode.worldPosition);
                 }
             }
         }
@@ -145,6 +148,14 @@ public class UnitController : MonoBehaviour
         // Transfering Data of this unit controller to others clients.
         pv.RPC("TransferUnitData", RpcTarget.OthersBuffered, this);
     }
+    #endregion
+
+    #region PUN
+    [PunRPC]
+    void StartUnitMovement(Vector2 destination)
+    {
+        Movement.StartMovement(destination);
+    }
 
     [PunRPC]
     void TransferUnitData(UnitController unit)
@@ -157,28 +168,8 @@ public class UnitController : MonoBehaviour
     }
     #endregion
 
-    [PunRPC]
-    void StartUnitMovement(Vector2 destination)
-    {
-        movement.StartMovement(destination);
-    }
-
-    #region Shoot
-    public void StartShootMode()
-    {
-        isShootMode = true;
-        StartCoroutine(ShootMode());
-        UIManager.Instance.HideShootBtn();
-    }
-
-    public void CancelShootMode()
-    {
-        isShootMode = false;
-        UIManager.Instance.ShowShootBtn();
-        StartCoroutine(ReturnTurretToInitState());
-    }
-
-    IEnumerator ShootMode()
+    #region Shoot Mode
+    public IEnumerator ShootMode()
     {
         while (isShootMode)
         {
@@ -199,11 +190,11 @@ public class UnitController : MonoBehaviour
         }
     }
 
-    IEnumerator ReturnTurretToInitState()
+    public IEnumerator ReturnTurretToInitState()
     {
         while (turret.transform.rotation != transform.rotation)
         {
-            turret.transform.rotation = Quaternion.RotateTowards(turret.transform.rotation, transform.rotation, movement.rotationSpeed * Time.deltaTime);
+            turret.transform.rotation = Quaternion.RotateTowards(turret.transform.rotation, transform.rotation, Movement.rotationSpeed * Time.deltaTime);
             yield return null;
         }
     }
@@ -220,7 +211,8 @@ public class UnitController : MonoBehaviour
 
         Projectile proj = Instantiate(projPrefab, shootPos.position, shootPos.rotation).GetComponent<Projectile>();
         proj.ownerId = ownerId;
-        TurnsController.Instance.Next();
+
+        StartCoroutine(TurnsController.Instance.WaitTillProjectileDestroy(proj));
         StartCoroutine(ReturnTurretToInitState());
     }
 
@@ -231,6 +223,7 @@ public class UnitController : MonoBehaviour
     }
     #endregion
 
+    #region Taking Damage
     public void TakeDamage()
     {
         Health--;
@@ -253,6 +246,12 @@ public class UnitController : MonoBehaviour
         Destroy(healthBar.gameObject);
         Destroy(gameObject);
     }
+
+    private void OnDestroy()
+    {
+        Pathfinding.Instance.gridComponent.UpdateGrid();
+    }
+    #endregion
 
     Vector2 GetCursorWorldPosition()
     {

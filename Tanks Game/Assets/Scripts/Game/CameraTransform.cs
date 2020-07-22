@@ -2,7 +2,30 @@
 
 public class CameraTransform : MonoBehaviour
 {
-    public bool isSpectatorMode = false;
+    #region Singleton
+    public static CameraTransform Instance { private set; get; }
+    #endregion
+
+    public enum CameraModes
+    {
+        Freefly,
+        Following
+    }
+
+    public CameraModes CameraMode
+    {
+        get { return mode; }
+        set
+        {
+            mode = value;
+            if (value == CameraModes.Following)
+                UIManager.Instance.ShowFollowingBtn();
+            else if (value == CameraModes.Freefly)
+                UIManager.Instance.ShowFreeflyBtn();
+        }
+    }
+    private CameraModes mode;
+
     [SerializeField] private float translateSpeed = 0.25f;
     [SerializeField] private float lerpSpeed = 25f;
 
@@ -14,19 +37,25 @@ public class CameraTransform : MonoBehaviour
 
     Camera cam;
 
+    void Awake()
+    {
+        Instance = this;
+    }
+
     void Start()
     {
         cam = Camera.main;
+        mode = CameraModes.Following;
 
         width = cam.orthographicSize * (float)Screen.width / Screen.height;
         height = cam.orthographicSize;
     }
     void Update()
     {
-        if (isSpectatorMode)
-            MoveCamera();
-        else
-            FollowTarget(TurnsController.Instance.NowPlayer.SelectedUnit.transform);
+        if (CameraMode == CameraModes.Freefly)
+            FreeflyMode();
+        else if (CameraMode == CameraModes.Following)
+            FollowingMode(TurnsController.Instance.NowPlayer.SelectedUnit.transform);
 
         // Clamping.
         transform.position = new Vector3(
@@ -35,15 +64,20 @@ public class CameraTransform : MonoBehaviour
         -10f);
     }
 
-    void MoveCamera()
+    void FreeflyMode()
     {
         Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 1f);
 
         transform.Translate(input * translateSpeed);
     }
 
-    void FollowTarget(Transform target)
+    void FollowingMode(Transform target)
     {
         transform.position = Vector2.Lerp(transform.position, target.position, Time.deltaTime * lerpSpeed);
+    }
+
+    public void ChangeCameraMode(CameraModes _cameraMode)
+    {
+        CameraMode = _cameraMode;
     }
 }

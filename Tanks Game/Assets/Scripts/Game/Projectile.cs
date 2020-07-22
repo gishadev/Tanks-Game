@@ -6,7 +6,7 @@ public class Projectile : MonoBehaviourPun
 {
     [HideInInspector] public float ownerId;
     [SerializeField] public float speed;
-    [SerializeField] private float lifeTime;
+     public float lifeTime;
 
     [SerializeField] private LayerMask whatIsSolid;
 

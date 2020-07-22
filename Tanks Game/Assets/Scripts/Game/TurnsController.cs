@@ -10,6 +10,7 @@ public class TurnsController : MonoBehaviour
 
     [SerializeField] private float turnTime = 15f;
     private float nowTime;
+    bool projectileMode = false;
     [Space]
     public TMP_Text timerText;
     public TMP_Text playerName;
@@ -45,16 +46,26 @@ public class TurnsController : MonoBehaviour
     void Update()
     {
         // Timer.
+        if (projectileMode)
+        {
+            timerText.text = "-";
+            return;
+        }
+
+
         if (nowTime <= 0)
             Next();
         else
             nowTime -= Time.deltaTime;
-        
+
         timerText.text = Mathf.Round(nowTime).ToString();
     }
 
     public void Next()
     {
+        UIManager.Instance.ResetButtons();
+        Pathfinding.Instance.gridComponent.visual.HideGrid();
+
         // Turn to next unit of current player.
         if (unitIndex < NowPlayer.myUnits.Count - 1)
         {
@@ -76,6 +87,18 @@ public class TurnsController : MonoBehaviour
         ChangeStrings();
 
         nowTime = turnTime;
+    }
+
+    public IEnumerator WaitTillProjectileDestroy(Projectile proj)
+    {
+        projectileMode = true;
+        while (proj != null)
+        {
+            yield return new WaitUntil(() => proj == null);
+            projectileMode = false;
+            Next();
+            yield return null;
+        }
     }
 
     void ChangeStrings()

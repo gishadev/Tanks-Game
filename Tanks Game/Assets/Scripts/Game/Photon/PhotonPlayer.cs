@@ -35,42 +35,17 @@ public class PhotonPlayer : MonoBehaviourPun
             unitsSpawner.InitUnitsSpawn();
         }
     }
-
-    //void Update()
-    //{
-    //    if (pv.IsMine)
-    //    {
-    //        // Unit selection.
-    //        if (Input.GetMouseButtonDown(0))
-    //        {
-    //            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-    //            Node selectedNode = Pathfinding.Instance.gridComponent.GetNodeFromVector2(mousePos);
-    //            if (selectedNode != null && UnitsManager.Instance.units.Any(x => x.Value.CurrentNode == selectedNode))
-    //            {
-    //                if (selectedUnit != null)
-    //                    selectedUnit.isSelected = false;
-
-    //                // If potential unit is mine => select.
-    //                UnitController potentialUnit = UnitsManager.Instance.units.FirstOrDefault(x => x.Value.CurrentNode == selectedNode).Value;
-    //                if (potentialUnit.Owner_ID == Id)
-    //                {
-    //                    SelectUnit(potentialUnit);
-    //                    Pathfinding.Instance.gridComponent.visual.ShowGrid(potentialUnit.CurrentNode);
-    //                }
-                        
-    //            }
-    //        }
-    //    }
-    //}
-
     public void SelectUnit(UnitController unitToSelect)
     {
         if (SelectedUnit != null)
+        {
             SelectedUnit.isSelected = false;
-
+            SelectedUnit.selectedMarker.SetActive(false);
+        }
+            
         unitToSelect.isSelected = true;
+        unitToSelect.selectedMarker.SetActive(true);
         SelectedUnit = unitToSelect;
-        Pathfinding.Instance.gridComponent.visual.ShowGrid(SelectedUnit.CurrentNode);
     }
 
     #region Serialize/Deserialize

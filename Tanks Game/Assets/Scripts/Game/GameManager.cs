@@ -7,6 +7,13 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { private set; get; }
     #endregion
     public PhotonPlayer myPP;
+    public UnitController NowMyUnitController
+    {
+        get
+        {
+            return myPP.SelectedUnit;
+        }
+    }
 
     void Awake()
     {

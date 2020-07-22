@@ -11,10 +11,6 @@ public class Pathfinding : MonoBehaviour
     public int movementRadius;
 
     [HideInInspector] public PGrid gridComponent;
-
-
-    //public List<Node> currentPath = new List<Node>();
-
     void Awake()
     {
         Instance = this;

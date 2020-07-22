@@ -41,6 +41,16 @@ public class PGrid : MonoBehaviour
             }
     }
 
+    public void UpdateGrid()
+    {
+        for (int x = 0; x < gridSizeX; x++)
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                bool isWalkable = !Physics2D.OverlapCircle(grid[x,y].worldPosition, nodeRadius / 2f, nonWalkableLayer);
+                grid[x, y].isWalkable = isWalkable;
+            }
+    }
+
     public List<Node> GetNeighbours(Node node)
     {
         List<Node> result = new List<Node>();
@@ -74,10 +84,10 @@ public class PGrid : MonoBehaviour
         return grid[x, y];
     }
 
-    public bool IsBlockedWithUnit(Node node)
-    {
-        return UnitsManager.Instance.units.Any(x => x.Value.CurrentNode == node);
-    }
+    //public bool IsBlockedWithUnit(Node node)
+    //{
+    //    return UnitsManager.Instance.units.Any(x => x.Value.CurrentNode == node);
+    //}
 
     void OnDrawGizmos()
     {
@@ -92,13 +102,6 @@ public class PGrid : MonoBehaviour
                     {
                         if (unit.Movement.currentPath.Contains(grid[x, y]))
                             Gizmos.color = Color.black;
-                    }
-
-                    // Units.
-                    if (UnitsManager.Instance.units.Count > 0)
-                    {
-                        if (IsBlockedWithUnit(grid[x, y]))
-                            Gizmos.color = Color.green;
                     }
 
                     // Selected unit.

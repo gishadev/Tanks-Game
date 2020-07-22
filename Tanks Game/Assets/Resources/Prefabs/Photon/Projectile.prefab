@@ -202,7 +202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ownerId: 0
-  speed: 4
+  speed: 6.5
   lifeTime: 8
   whatIsSolid:
     serializedVersion: 2
