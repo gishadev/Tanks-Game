@@ -54,15 +54,20 @@ public class PhotonRoom : MonoBehaviourPunCallbacks
     void CreatePlayer()
     {
         PhotonNetwork.Instantiate(Path.Combine("Prefabs", "Photon", "Photon Player"), Vector3.zero, Quaternion.identity);
+
+        if (PhotonNetwork.CurrentRoom.Players.Count > 1)
+        {
+            photonPlayers.AddRange(FindObjectsOfType<PhotonPlayer>());
+        }
     }
 
-    public override void OnPlayerLeftRoom(Player otherPlayer)
-    {
-        int index = photonPlayers.FindIndex(x => x.Id == otherPlayer.ActorNumber);
+    //public override void OnPlayerLeftRoom(Player otherPlayer)
+    //{
+    //    int index = photonPlayers.FindIndex(x => x.Id == otherPlayer.ActorNumber);
 
-        if (index != -1)
-            photonPlayers.RemoveAt(index);
+    //    if (index != -1)
+    //        photonPlayers.RemoveAt(index);
 
-        Debug.Log(photonPlayers.Count);
-    }
+    //    Debug.Log(photonPlayers.Count);
+    //}
 }

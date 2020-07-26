@@ -26,9 +26,8 @@ public class PhotonPlayer : MonoBehaviourPun
             Owner = pv.Owner;
             Id = Owner.ActorNumber;
             GameManager.Instance.myPP = this;
-            // Adding this photon player to list.
-            CallInitPhotonPlayer(this);
-
+            // Syncing this photon player data.
+            pv.RPC("InitPhotonPlayer", RpcTarget.AllBuffered, this);
             // Setting Units Spawner.
             unitsSpawner = UnitsManager.Instance.spawners[Id - 1];
             unitsSpawner.Owner = this;
@@ -67,17 +66,10 @@ public class PhotonPlayer : MonoBehaviourPun
     }
     #endregion 
 
-    #region Init
-    void CallInitPhotonPlayer(PhotonPlayer pp)
-    {
-        pv.RPC("InitPhotonPlayer", RpcTarget.AllBuffered, pp);
-    }
 
     [PunRPC]
     void InitPhotonPlayer(PhotonPlayer pp)
     {
         this.Id = pp.Id;
-        PhotonRoom.Instance.photonPlayers.Add(pp);
     }
-    #endregion
 }

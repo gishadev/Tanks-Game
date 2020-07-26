@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using TMPro;
 using UnityEngine;
+using Photon.Pun;
 
 public class TurnsController : MonoBehaviour
 {
@@ -28,9 +29,12 @@ public class TurnsController : MonoBehaviour
     int unitIndex = 0;
     int playerIndex = 0;
 
+    PhotonView pv;
+
     void Awake()
     {
         Instance = this;
+        pv = GetComponent<PhotonView>();
     }
 
     void Start()
@@ -54,14 +58,21 @@ public class TurnsController : MonoBehaviour
 
 
         if (nowTime <= 0)
-            Next();
+            CallNext();
         else
             nowTime -= Time.deltaTime;
 
         timerText.text = Mathf.Round(nowTime).ToString();
     }
 
-    public void Next()
+    public void CallNext()
+    {
+        if (pv.IsMine)
+            pv.RPC("Next", RpcTarget.All);
+    }
+
+    [PunRPC]
+    void Next()
     {
         UIManager.Instance.ResetButtons();
         Pathfinding.Instance.gridComponent.visual.HideGrid();
@@ -96,7 +107,7 @@ public class TurnsController : MonoBehaviour
         {
             yield return new WaitUntil(() => proj == null);
             projectileMode = false;
-            Next();
+            CallNext();
             yield return null;
         }
     }

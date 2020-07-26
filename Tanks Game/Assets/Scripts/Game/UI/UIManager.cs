@@ -32,7 +32,7 @@ public class UIManager : MonoBehaviour
         if (GameManager.Instance.NowMyUnitController != null)
         {
             if (!selectedUnit.IsMoving)
-                TurnsController.Instance.Next();
+                TurnsController.Instance.CallNext();
         }
     }
 
