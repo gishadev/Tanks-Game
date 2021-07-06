@@ -44,3 +44,6 @@ TagManager:
   - name: Vehicle
     uniqueID: 2762977363
     locked: 0
+  - name: Bushes
+    uniqueID: 516466879
+    locked: 0
