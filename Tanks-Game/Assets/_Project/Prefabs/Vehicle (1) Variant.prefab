@@ -57,7 +57,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8531466893594737291, guid: 2e1737bc69e8d094db80d5d3e4c755ab, type: 3}
       propertyPath: m_Name
-      value: Vehicle (1)
+      value: Vehicle (1) Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 8531466893594737291, guid: 2e1737bc69e8d094db80d5d3e4c755ab, type: 3}
+      propertyPath: m_TagString
+      value: Player2
       objectReference: {fileID: 0}
     - target: {fileID: 8531466893594737295, guid: 2e1737bc69e8d094db80d5d3e4c755ab, type: 3}
       propertyPath: hAxis

@@ -45,7 +45,13 @@ namespace Gisha.TanksGame.Core
 
         private void Shoot()
         {
-            Instantiate(projectilePrefab, shootPos.position, shootPos.rotation);
+            var projectile = Instantiate(projectilePrefab, shootPos.position, shootPos.rotation).GetComponent<Projectile>();
+            projectile.OwnerTag = gameObject.tag;
+        }
+
+        public void DestroyVehicle()
+        {
+            Destroy(gameObject);
         }
     }
 }

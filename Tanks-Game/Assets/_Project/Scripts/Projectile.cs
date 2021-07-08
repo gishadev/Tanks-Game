@@ -11,9 +11,14 @@ namespace Gisha.TanksGame.Core
         [SerializeField] private LayerMask whatIsSolid;
         [SerializeField] private float raycastDistance = 0.1f;
 
+        public string OwnerTag { get; set; }
+
         private void Start()
         {
             Invoke("DestroyProjectile", lifeTime);
+
+            if (string.IsNullOrEmpty(OwnerTag))
+                Debug.LogError("There is no OwnerTag!");
         }
 
         private void Update()
@@ -28,7 +33,13 @@ namespace Gisha.TanksGame.Core
             var hitInfo = Physics2D.Raycast(transform.position, transform.up, raycastDistance, whatIsSolid);
 
             if (hitInfo.collider != null)
+            {
+                // If hit vehicle is enemy > destroy it.
+                if ((hitInfo.collider.CompareTag("Player1") || hitInfo.collider.CompareTag("Player2")) && !hitInfo.collider.CompareTag(OwnerTag))
+                    hitInfo.collider.GetComponent<VehicleController>().DestroyVehicle();
+
                 DestroyProjectile();
+            }
         }
 
         private void DestroyProjectile()
