@@ -4,10 +4,17 @@ namespace Gisha.TanksGame.Core
 {
     public class VehicleController : MonoBehaviour
     {
+        [Header("Input")]
+        [SerializeField] private string hAxis;
+        [SerializeField] private string vAxis;
+        [SerializeField] private KeyCode shootKey;
+
+
+        [Header("Components")]
         [SerializeField] private GameObject projectilePrefab;
         [SerializeField] private Transform shootPos;
 
-
+        [Header("Speeds")]
         [SerializeField] private float moveSpeed;
         [SerializeField] private float rotationSpeed;
 
@@ -22,12 +29,12 @@ namespace Gisha.TanksGame.Core
 
         private void Update()
         {
-            _vInput = Input.GetAxisRaw("Vertical");
-            _hInput = Input.GetAxisRaw("Horizontal");
+            _vInput = Input.GetAxisRaw(vAxis);
+            _hInput = Input.GetAxisRaw(hAxis);
 
             transform.Rotate(-Vector3.forward * _hInput * rotationSpeed * Time.deltaTime);
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(shootKey))
                 Shoot();
         }
 
