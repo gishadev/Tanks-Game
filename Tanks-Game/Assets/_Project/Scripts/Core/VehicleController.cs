@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Gisha.TanksGame.Core
@@ -9,7 +10,6 @@ namespace Gisha.TanksGame.Core
         [SerializeField] private string vAxis;
         [SerializeField] private KeyCode shootKey;
 
-
         [Header("Components")]
         [SerializeField] private GameObject projectilePrefab;
         [SerializeField] private Transform shootPos;
@@ -17,6 +17,8 @@ namespace Gisha.TanksGame.Core
         [Header("Speeds")]
         [SerializeField] private float moveSpeed;
         [SerializeField] private float rotationSpeed;
+
+        public event Action OnDestroyed;
 
         float _hInput;
         float _vInput;
@@ -51,6 +53,7 @@ namespace Gisha.TanksGame.Core
 
         public void DestroyVehicle()
         {
+            OnDestroyed?.Invoke();
             Destroy(gameObject);
         }
     }

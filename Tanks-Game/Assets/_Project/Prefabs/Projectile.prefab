@@ -100,4 +100,4 @@ MonoBehaviour:
   whatIsSolid:
     serializedVersion: 2
     m_Bits: 192
-  raycastDistance: 0.04
+  raycastDistance: 0.05

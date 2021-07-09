@@ -35,8 +35,13 @@ namespace Gisha.TanksGame.Core
             if (hitInfo.collider != null)
             {
                 // If hit vehicle is enemy > destroy it.
-                if ((hitInfo.collider.CompareTag("Player1") || hitInfo.collider.CompareTag("Player2")) && !hitInfo.collider.CompareTag(OwnerTag))
-                    hitInfo.collider.GetComponent<VehicleController>().DestroyVehicle();
+                if (hitInfo.collider.gameObject.layer.Equals(LayerMask.NameToLayer("Vehicle")))
+                {
+                    if (!hitInfo.collider.CompareTag(OwnerTag))
+                        hitInfo.collider.GetComponent<VehicleController>().DestroyVehicle();
+                    else
+                        return;
+                }
 
                 DestroyProjectile();
             }
