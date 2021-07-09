@@ -5,17 +5,23 @@ namespace Gisha.TanksGame.Core
     public class CapturePoint : MonoBehaviour
     {
         [SerializeField] private float fullCaptureTime = 5f;
+        [SerializeField] private Transform capturedCircle;
 
-        public float CaptureProgress { private set; get; }
+        public float CaptureProgress
+        {
+            get => _captureProgress;
+            private set => _captureProgress = Mathf.Clamp(value, -1.01f, 1.01f);
+        }
+        float _captureProgress;
 
         bool _p1Capturing = false;
         bool _p2Capturing = false;
 
-        SpriteRenderer _spriteRenderer;
+        SpriteRenderer _capturedCircleSR;
 
         private void Awake()
         {
-            _spriteRenderer = GetComponent<SpriteRenderer>();
+            _capturedCircleSR = capturedCircle.GetComponent<SpriteRenderer>();
         }
 
         private void Update()
@@ -24,7 +30,7 @@ namespace Gisha.TanksGame.Core
             if (_p1Capturing && !_p2Capturing)
             {
                 CaptureProgress -= Time.deltaTime / fullCaptureTime;
-                if (CaptureProgress > 1f)
+                if (CaptureProgress < -1f)
                     Debug.Log("First player won!");
             }
 
@@ -32,20 +38,20 @@ namespace Gisha.TanksGame.Core
             else if (!_p1Capturing && _p2Capturing)
             {
                 CaptureProgress += Time.deltaTime / fullCaptureTime;
-                if (CaptureProgress < -1f)
+                if (CaptureProgress > 1f)
                     Debug.Log("Second player won!");
             }
 
-            _spriteRenderer.color = LerpColor(Color.red, Color.white, Color.blue, CaptureProgress);
+            _capturedCircleSR.color = LerpColor(Color.red, Color.white, Color.blue, CaptureProgress);
+            capturedCircle.localScale = Vector2.one * Mathf.Abs(CaptureProgress);
         }
 
         private Color LerpColor(Color leftColor, Color middleColor, Color rightColor, float value)
         {
-            float absValue = Mathf.Abs(value);
             if (value < 0)
-                return Color.Lerp(middleColor, leftColor, absValue);
+                return leftColor;
             else if (value > 0)
-                return Color.Lerp(middleColor, rightColor, absValue);
+                return rightColor;
             else
                 return middleColor;
         }
