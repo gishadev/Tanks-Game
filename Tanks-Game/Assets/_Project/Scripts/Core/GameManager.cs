@@ -10,15 +10,44 @@ namespace Gisha.TanksGame.Core
         private static GameManager Instance { get; set; }
         #endregion
 
+        [Header("Scores")]
         [SerializeField] private TMP_Text p1TextScore;
         [SerializeField] private TMP_Text p2TextScore;
 
+        [Header("Timer")]
+        [SerializeField] private float roundDurationInSeconds = 120f;
+        [SerializeField] private TMP_Text timerText;
+
         int _p1Score = 0;
         int _p2Score = 0;
+        float _duration;
 
         private void Awake()
         {
             CreateInstance();
+        }
+
+        private void Start()
+        {
+            ResetTime();
+        }
+
+        private void Update()
+        {
+            if (_duration < 0f)
+            {
+                var progress = FindObjectOfType<CapturePoint>().CaptureProgress;
+                if (progress < 0f)
+                    ScoreFirst();
+                else if (progress > 0f)
+                    ScoreSecond();
+                else
+                    ScoreTie();
+            }
+
+            _duration -= Time.deltaTime;
+
+            timerText.text = TimeFormat(_duration);
         }
 
         private void CreateInstance()
@@ -40,6 +69,7 @@ namespace Gisha.TanksGame.Core
             Instance.p1TextScore.text = Instance._p1Score.ToString();
 
             LoadRandomLevel();
+            Instance.ResetTime();
         }
 
         public static void ScoreSecond()
@@ -48,16 +78,31 @@ namespace Gisha.TanksGame.Core
             Instance.p2TextScore.text = Instance._p2Score.ToString();
 
             LoadRandomLevel();
+            Instance.ResetTime();
         }
 
         public static void ScoreTie()
         {
             LoadRandomLevel();
+            Instance.ResetTime();
         }
 
         public static void LoadRandomLevel()
         {
             SceneManager.LoadScene(0);
+        }
+
+        private void ResetTime()
+        {
+            _duration = roundDurationInSeconds;
+        }
+
+        private string TimeFormat(float time)
+        {
+            int minutes = Mathf.FloorToInt(time / 60f);
+            int seconds = Mathf.FloorToInt(time - 60f * minutes);
+
+            return string.Format("{0:00}:{1:00}", minutes, seconds);
         }
     }
 }
