@@ -31,7 +31,10 @@ namespace Gisha.TanksGame.Core
             {
                 CaptureProgress -= Time.deltaTime / fullCaptureTime;
                 if (CaptureProgress < -1f)
+                {
+                    GameManager.ScoreFirst();
                     Debug.Log("First player won!");
+                }
             }
 
             // Second player capturing.
@@ -39,7 +42,10 @@ namespace Gisha.TanksGame.Core
             {
                 CaptureProgress += Time.deltaTime / fullCaptureTime;
                 if (CaptureProgress > 1f)
+                {
+                    GameManager.ScoreSecond();
                     Debug.Log("Second player won!");
+                }
             }
 
             _capturedCircleSR.color = LerpColor(Color.red, Color.white, Color.blue, CaptureProgress);
