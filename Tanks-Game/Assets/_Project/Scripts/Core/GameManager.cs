@@ -89,7 +89,19 @@ namespace Gisha.TanksGame.Core
 
         public static void LoadRandomLevel()
         {
-            SceneManager.LoadScene(0);
+            if (SceneManager.sceneCountInBuildSettings < 2)
+            {
+                Debug.LogError("There is less than 2 scenes!");
+                return;
+            }
+
+            var currentIndex = SceneManager.GetActiveScene().buildIndex;
+            var randomIndex = currentIndex;
+
+            while (randomIndex == currentIndex)
+                randomIndex = Random.Range(0, SceneManager.sceneCountInBuildSettings);
+
+            SceneManager.LoadScene($"Level_{randomIndex + 1}");
         }
 
         private void ResetTime()
