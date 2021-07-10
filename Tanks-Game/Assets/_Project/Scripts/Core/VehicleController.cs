@@ -22,11 +22,21 @@ namespace Gisha.TanksGame.Core
 
         float _hInput;
         float _vInput;
+
+        // Bounds
+        float MAX_X, MAX_Y;
+
         Rigidbody2D _rb;
 
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
+        }
+
+        private void Start()
+        {
+            MAX_Y = Camera.main.orthographicSize;
+            MAX_X = MAX_Y * ((float)Screen.width / Screen.height);
         }
 
         private void Update()
@@ -43,6 +53,7 @@ namespace Gisha.TanksGame.Core
         private void FixedUpdate()
         {
             _rb.velocity = transform.up * _vInput * moveSpeed * Time.deltaTime;
+            ClampInBounds();
         }
 
         private void Shoot()
@@ -55,6 +66,14 @@ namespace Gisha.TanksGame.Core
         {
             OnDestroyed?.Invoke();
             Destroy(gameObject);
+        }
+
+        private void ClampInBounds()
+        {
+            float xPos = Mathf.Clamp(transform.position.x, -MAX_X + 0.5f, MAX_X - 0.5f);
+            float yPos = Mathf.Clamp(transform.position.y, -MAX_Y + 0.5f, MAX_Y - 0.5f);
+
+            transform.position = new Vector2(xPos, yPos);
         }
     }
 }
