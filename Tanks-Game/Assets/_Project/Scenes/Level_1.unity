@@ -908,6 +908,11 @@ MonoBehaviour:
   p2TextScore: {fileID: 414532739}
   roundDurationInSeconds: 120
   timerText: {fileID: 98047719}
+  levelChangeDelay: 2.5
+  roundResultGUI:
+    p1WonImage: {fileID: 1896889216}
+    p2WonImage: {fileID: 595201710}
+    drawImage: {fileID: 2046784145}
 --- !u!4 &445273440
 Transform:
   m_ObjectHideFlags: 0

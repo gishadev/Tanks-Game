@@ -12,7 +12,7 @@ namespace Gisha.TanksGame.Core
             get => _captureProgress;
             private set => _captureProgress = Mathf.Clamp(value, -1.01f, 1.01f);
         }
-        float _captureProgress;
+        float _captureProgress = 0f;
 
         bool _p1Capturing = false;
         bool _p2Capturing = false;
@@ -33,7 +33,6 @@ namespace Gisha.TanksGame.Core
                 if (CaptureProgress < -1f)
                     GameManager.ScoreFirst();
             }
-
             // Second player capturing.
             else if (!_p1Capturing && _p2Capturing)
             {
@@ -41,6 +40,8 @@ namespace Gisha.TanksGame.Core
                 if (CaptureProgress > 1f)
                     GameManager.ScoreSecond();
             }
+            else
+                CaptureProgress -= Mathf.Sign(CaptureProgress) * Time.deltaTime / fullCaptureTime;
 
             _capturedCircleSR.color = LerpColor(Color.red, Color.white, Color.blue, CaptureProgress);
             capturedCircle.localScale = Vector2.one * Mathf.Abs(CaptureProgress);

@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,6 +18,12 @@ namespace Gisha.TanksGame.Core
         [Header("Timer")]
         [SerializeField] private float roundDurationInSeconds = 120f;
         [SerializeField] private TMP_Text timerText;
+        [Space]
+        [SerializeField] private float levelChangeDelay = 5f;
+
+        [Header("RoundResult")]
+        [SerializeField] private RoundResultGUI roundResultGUI;
+
 
         int _p1Score = 0;
         int _p2Score = 0;
@@ -30,25 +37,12 @@ namespace Gisha.TanksGame.Core
         private void Start()
         {
             ResetTime();
+            
         }
 
-        private void Update()
-        {
-            if (_duration < 0f)
-            {
-                var progress = FindObjectOfType<CapturePoint>().CaptureProgress;
-                if (progress < 0f)
-                    ScoreFirst();
-                else if (progress > 0f)
-                    ScoreSecond();
-                else
-                    ScoreTie();
-            }
-
-            _duration -= Time.deltaTime;
-
-            timerText.text = TimeFormat(_duration);
-        }
+        public static void ScoreDraw() => Instance.StartCoroutine(Instance.ScorePlayerCoroutine(0));
+        public static void ScoreFirst() => Instance.StartCoroutine(Instance.ScorePlayerCoroutine(1));
+        public static void ScoreSecond() => Instance.StartCoroutine(Instance.ScorePlayerCoroutine(2));
 
         private void CreateInstance()
         {
@@ -63,31 +57,64 @@ namespace Gisha.TanksGame.Core
             }
         }
 
-        public static void ScoreFirst()
+        private IEnumerator RoundTimeCoroutine()
         {
-            Instance._p1Score++;
-            Instance.p1TextScore.text = Instance._p1Score.ToString();
+            while (true)
+            {
+                if (_duration < 0f)
+                {
+                    ScoreDraw();
+                    timerText.text = string.Empty;
+                    break;
+                }
 
-            LoadRandomLevel();
-            Instance.ResetTime();
+                else
+                {
+                    _duration -= Time.deltaTime;
+                    timerText.text = TimeFormat(_duration);
+                }
+
+                yield return null;
+            }
         }
 
-        public static void ScoreSecond()
+        /// <summary>
+        /// Score players with 1 or 2 and draw with 0
+        /// </summary>
+        private IEnumerator ScorePlayerCoroutine(int playerNum)
         {
-            Instance._p2Score++;
-            Instance.p2TextScore.text = Instance._p2Score.ToString();
+            if (playerNum != 0 && playerNum != 1 && playerNum != 2)
+            {
+                Debug.LogError("Player Num can only be 1 (left) or 2 (right) or 0 (draw)");
+                yield break;
+            }
 
+            FindObjectOfType<CapturePoint>().enabled = false;
+
+            switch (playerNum)
+            {
+                case 0:
+                    roundResultGUI.ShowDraw();
+                    break;
+                case 1:
+                    _p1Score++;
+                    p1TextScore.text = _p1Score.ToString();
+                    roundResultGUI.ShowP1Won();
+                    break;
+                case 2:
+                    _p2Score++;
+                    p2TextScore.text = _p2Score.ToString();
+                    roundResultGUI.ShowP2Won();
+                    break;
+            }
+
+            yield return new WaitForSeconds(levelChangeDelay);
             LoadRandomLevel();
-            Instance.ResetTime();
+            ResetTime();
+            roundResultGUI.ResetGUI();
         }
 
-        public static void ScoreTie()
-        {
-            LoadRandomLevel();
-            Instance.ResetTime();
-        }
-
-        public static void LoadRandomLevel()
+        private void LoadRandomLevel()
         {
             if (SceneManager.sceneCountInBuildSettings < 2)
             {
@@ -107,6 +134,7 @@ namespace Gisha.TanksGame.Core
         private void ResetTime()
         {
             _duration = roundDurationInSeconds;
+            StartCoroutine(RoundTimeCoroutine());
         }
 
         private string TimeFormat(float time)
@@ -115,6 +143,34 @@ namespace Gisha.TanksGame.Core
             int seconds = Mathf.FloorToInt(time - 60f * minutes);
 
             return string.Format("{0:00}:{1:00}", minutes, seconds);
+        }
+    }
+
+    [System.Serializable]
+    internal class RoundResultGUI
+    {
+        [SerializeField] private GameObject p1WonImage;
+        [SerializeField] private GameObject p2WonImage;
+        [SerializeField] private GameObject drawImage;
+
+        public void ShowP1Won() => ShowResult(p1WonImage);
+        public void ShowP2Won() => ShowResult(p2WonImage);
+        public void ShowDraw() => ShowResult(drawImage);
+
+        public void ResetGUI()
+        {
+            p1WonImage.SetActive(false);
+            p2WonImage.SetActive(false);
+            drawImage.SetActive(false);
+        }
+
+        private void ShowResult(GameObject target)
+        {
+            p1WonImage.SetActive(false);
+            p2WonImage.SetActive(false);
+            drawImage.SetActive(false);
+
+            target.SetActive(true);
         }
     }
 }
