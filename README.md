@@ -16,7 +16,7 @@ This time I remade my old project. Your aim is to capture the center. This game 
 ## Screenshots
 
 <img alt="Screenshot" width="512" align="center" src="https://github.com/BaggyGishev/Tanks-Game/blob/master/GithubContents/Screenshot_1.png?raw=true">
-<img alt="Screenshot" width="512" align="center" src="https://github.com/BaggyGishev/Tanks-Game/blob/master/GithubContents/Screenshot_1.png?raw=true">
+<img alt="Screenshot" width="512" align="center" src="https://github.com/BaggyGishev/Tanks-Game/blob/master/GithubContents/Screenshot_2.png?raw=true">
 
 ## Used assets
 * [Ground Shaker](https://zintoki.itch.io/ground-shaker)
