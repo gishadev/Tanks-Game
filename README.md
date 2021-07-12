@@ -10,8 +10,8 @@ This time I remade my old project. Your aim is to capture the center. This game 
 
 ## Controls
 
-[W,A,S,D + SPACE] - First player
-[←↑→↓ + O] - Second player
+* [W,A,S,D + SPACE] - First player
+* [←↑→↓ + O] - Second player
 
 ## Screenshots
 
