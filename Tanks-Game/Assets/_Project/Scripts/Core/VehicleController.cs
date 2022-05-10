@@ -1,4 +1,5 @@
 using System;
+using Gisha.Effects.Audio;
 using UnityEngine;
 
 namespace Gisha.TanksGame.Core
@@ -53,6 +54,7 @@ namespace Gisha.TanksGame.Core
         private void FixedUpdate()
         {
             _rb.velocity = transform.up * _vInput * moveSpeed * Time.deltaTime;
+            
             ClampInBounds();
         }
 
@@ -60,10 +62,12 @@ namespace Gisha.TanksGame.Core
         {
             var projectile = Instantiate(projectilePrefab, shootPos.position, shootPos.rotation).GetComponent<Projectile>();
             projectile.OwnerTag = gameObject.tag;
+            AudioManager.Instance.PlaySFX("shot");
         }
 
         public void DestroyVehicle()
         {
+            AudioManager.Instance.PlaySFX("explode");
             OnDestroyed?.Invoke();
             Destroy(gameObject);
         }

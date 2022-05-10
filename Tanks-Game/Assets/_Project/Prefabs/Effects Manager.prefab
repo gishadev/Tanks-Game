@@ -1,0 +1,486 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4984701462102529934
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4984701462102529933}
+  - component: {fileID: 1143415586}
+  m_Layer: 0
+  m_Name: Effects Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4984701462102529933
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4984701462102529934}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1143415586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4984701462102529934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecf4889b9d97c794d84d0d3cfaf98388, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicCollection: []
+  sfxCollection:
+  - name: computerNoise_000
+    audioClip: {fileID: 8300000, guid: 9093c552faeed11478d5a37651e45196, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: computerNoise_001
+    audioClip: {fileID: 8300000, guid: 8da6a92992ebe1e4ba67c129f953f913, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: computerNoise_002
+    audioClip: {fileID: 8300000, guid: 1bc89ccb1144bba4d8497ccf9a9a167d, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: computerNoise_003
+    audioClip: {fileID: 8300000, guid: f9a60004b11658c42b7bedf3b16f64f8, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: doorClose_000
+    audioClip: {fileID: 8300000, guid: 98b65cece678b89479909ab488dad24c, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: doorClose_001
+    audioClip: {fileID: 8300000, guid: 3d53d31b70cd2b14e934003ffac1ab3c, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: doorClose_002
+    audioClip: {fileID: 8300000, guid: cbe0376b5f4d1b9469b3a386b3fc6701, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: doorOpen_000
+    audioClip: {fileID: 8300000, guid: 230731ecf14debd46ac002a5107bcb38, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: doorOpen_001
+    audioClip: {fileID: 8300000, guid: a32f2e476ac77094688ad952a51dd4a0, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: doorOpen_002
+    audioClip: {fileID: 8300000, guid: 42bf5969568a9fb4a9fc280dcc8d7302, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: engineCircular_000
+    audioClip: {fileID: 8300000, guid: a7882b492caa8e04f9d3f67b353dd80f, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: engineCircular_001
+    audioClip: {fileID: 8300000, guid: 233fcb610e155c04ea5ee95652ab4ab8, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: engineCircular_002
+    audioClip: {fileID: 8300000, guid: 574492b59f3d23d47a9767d57fbc0887, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: engineCircular_003
+    audioClip: {fileID: 8300000, guid: e927281f7b6dfc245bf7dcd791923da9, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: engineCircular_004
+    audioClip: {fileID: 8300000, guid: b18ff5ed3bbbc204cbeacc1e0e10df9d, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: explode
+    audioClip: {fileID: 8300000, guid: cfe7654e450ea694b83a6a7508ae09a5, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 0.75
+    pitch: 1
+  - name: explosionCrunch_001
+    audioClip: {fileID: 8300000, guid: 7ecb7ac07ebed7a498635754436e60bf, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: explosionCrunch_002
+    audioClip: {fileID: 8300000, guid: d20b79cfbb2ef2a4a9f803c57d3bfb1b, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: explosionCrunch_003
+    audioClip: {fileID: 8300000, guid: a4fb1e6fbe491cd4890c5da659e4d147, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: explosionCrunch_004
+    audioClip: {fileID: 8300000, guid: 1bcfd733bb05a1144bb34f5c1d27a5db, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: forceField_000
+    audioClip: {fileID: 8300000, guid: 1c96afe6248b8ab428b0f82ec5bbbc70, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: forceField_001
+    audioClip: {fileID: 8300000, guid: 5945234408ada03499d552f8c600eada, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: forceField_002
+    audioClip: {fileID: 8300000, guid: 08151a928e134954f96fe4c878b95fe3, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: forceField_003
+    audioClip: {fileID: 8300000, guid: 41e008b82eab1414f891cf889167ef40, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: forceField_004
+    audioClip: {fileID: 8300000, guid: f605618685c8ed84f8e0bdb347299dbb, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: impactMetal_000
+    audioClip: {fileID: 8300000, guid: 3fbbd47b78b34804b9d4f1296a4a69af, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: impactMetal_001
+    audioClip: {fileID: 8300000, guid: 908a2b4ff2e328e4d83a9066da750453, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: projectile_explode
+    audioClip: {fileID: 8300000, guid: df1f63d0e5b31014ba66199a3de73690, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: impactMetal_003
+    audioClip: {fileID: 8300000, guid: 1f203261eba60664c973d6f746375025, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: shot
+    audioClip: {fileID: 8300000, guid: 48711dbb3e0ffe143a03a753034e73d8, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: laserLarge_000
+    audioClip: {fileID: 8300000, guid: ef56a6d7ff3a5754caee3a5ad11aa62c, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: laserLarge_001
+    audioClip: {fileID: 8300000, guid: 1e72c9c5894ded14a8ed35dc5cb6c917, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: laserLarge_002
+    audioClip: {fileID: 8300000, guid: a3815748737db824fae919fec3f45006, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: laserLarge_003
+    audioClip: {fileID: 8300000, guid: 27aa90c26f75ad64cb91f49bb7f0d41e, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: laserLarge_004
+    audioClip: {fileID: 8300000, guid: e3cb88357a910094da535a6d7c6f2685, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: laserRetro_000
+    audioClip: {fileID: 8300000, guid: fe4304c7d1f41fa4f81ed4903e9525be, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: laserRetro_001
+    audioClip: {fileID: 8300000, guid: f8ded81ecfc5da744bed5e59d176ee53, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: laserRetro_002
+    audioClip: {fileID: 8300000, guid: b8137364cc7ffd9439193631c38c842e, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: laserRetro_003
+    audioClip: {fileID: 8300000, guid: db3dd545cf32a5e4e807662cac7d58cf, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: laserRetro_004
+    audioClip: {fileID: 8300000, guid: a801f320e909fdd4fafa9eafc425f972, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: laserSmall_000
+    audioClip: {fileID: 8300000, guid: 19e405d108a7ebd4980bb151c2a13cc7, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: laserSmall_001
+    audioClip: {fileID: 8300000, guid: 6384e86d9bb0d3c4683df634f21d62a0, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: laserSmall_002
+    audioClip: {fileID: 8300000, guid: c30fa7e93460b534c933cd7da556033c, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: laserSmall_003
+    audioClip: {fileID: 8300000, guid: 211c2b7d81bcf42469fd15f49f36574b, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: laserSmall_004
+    audioClip: {fileID: 8300000, guid: 24f20db7b56814741bc0d40bc84856fe, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: lowFrequency_explosion_000
+    audioClip: {fileID: 8300000, guid: a4d2f0f4e7fc5944b984c9cb6c45583e, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: lowFrequency_explosion_001
+    audioClip: {fileID: 8300000, guid: 89fe51726199ce448a2ff8817a51cabd, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: slime_000
+    audioClip: {fileID: 8300000, guid: 27c76b06a52a8c24db111137e3a285d7, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: slime_001
+    audioClip: {fileID: 8300000, guid: 94dc21d26a7717a4e9dfd2daacf0ecb9, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: spaceEngineLarge_000
+    audioClip: {fileID: 8300000, guid: 04d03218c05faab4fa2a969e0791c669, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: spaceEngineLarge_001
+    audioClip: {fileID: 8300000, guid: 52211778757c41b4b93b83e179c7960f, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: spaceEngineLarge_002
+    audioClip: {fileID: 8300000, guid: e7af24976c3e25f428a460860808e35a, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: spaceEngineLarge_003
+    audioClip: {fileID: 8300000, guid: 4b3ee2da561460a44ae557cfdaa071d5, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: spaceEngineLarge_004
+    audioClip: {fileID: 8300000, guid: 13a08eb0dcb5fa144b8b701ed8c14f30, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: engine
+    audioClip: {fileID: 8300000, guid: 42aa4cb585f6fa04ca948eb9bd8da007, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 0.2
+    pitch: 0.75
+  - name: spaceEngineLow_001
+    audioClip: {fileID: 8300000, guid: 8243579924340274fbdc36b490940602, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: spaceEngineLow_002
+    audioClip: {fileID: 8300000, guid: 8cf4ddf3c8d91ce469c2d90069d055c4, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: spaceEngineLow_003
+    audioClip: {fileID: 8300000, guid: b1b39719a85f8644d9c99e149e0a89b1, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: spaceEngineLow_004
+    audioClip: {fileID: 8300000, guid: 2d60ed217111cdd4bbb26b4dab2a7f12, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: spaceEngineSmall_000
+    audioClip: {fileID: 8300000, guid: 80504e7930211b441b7a5a7c5cb7dcaa, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: spaceEngineSmall_001
+    audioClip: {fileID: 8300000, guid: 7e3f7cd27be8afc41aadafdd31de8d5d, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: spaceEngineSmall_002
+    audioClip: {fileID: 8300000, guid: bc9a9e40be2babc40aeb81acd185f66d, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: spaceEngineSmall_003
+    audioClip: {fileID: 8300000, guid: aec313e79b63e8a4ba1ce651951b6176, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: spaceEngineSmall_004
+    audioClip: {fileID: 8300000, guid: 9709db67f9245344d99a9bd0348f8318, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: capture
+    audioClip: {fileID: 8300000, guid: 8c57c77e2ae9c43499e5eb1ff7453ff8, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: spaceEngine_001
+    audioClip: {fileID: 8300000, guid: ffe6bd710f6877d4b88fce43aa5ba692, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: spaceEngine_002
+    audioClip: {fileID: 8300000, guid: 7e0bf959c8b54e342a8d1b4675e6cedf, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: spaceEngine_003
+    audioClip: {fileID: 8300000, guid: b9085faf5e743bf4b95ab9257dc02e24, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: thrusterFire_000
+    audioClip: {fileID: 8300000, guid: d2e8a1da1575bbc46be0615389651bee, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: thrusterFire_001
+    audioClip: {fileID: 8300000, guid: 7e9c35b274477c643bb37f9b3c2364c8, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: thrusterFire_002
+    audioClip: {fileID: 8300000, guid: c644fd49e26a7244ea67654d7f737389, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: thrusterFire_003
+    audioClip: {fileID: 8300000, guid: 14aca122f5dbb6d4184f6f62e83e7a98, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  - name: thrusterFire_004
+    audioClip: {fileID: 8300000, guid: ab4e588be7b72534fbcb5096cca475c0, type: 3}
+    isLooping: 0
+    isFade: 0
+    volume: 1
+    pitch: 1
+  fadeTransitionSpeed: 0

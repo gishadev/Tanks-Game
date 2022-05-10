@@ -1,3 +1,4 @@
+using Gisha.Effects.Audio;
 using UnityEngine;
 
 namespace Gisha.TanksGame.Core
@@ -12,10 +13,10 @@ namespace Gisha.TanksGame.Core
             get => _captureProgress;
             private set => _captureProgress = Mathf.Clamp(value, -1.01f, 1.01f);
         }
-        float _captureProgress = 0f;
+        float _captureProgress;
 
-        bool _p1Capturing = false;
-        bool _p2Capturing = false;
+        bool _p1Capturing;
+        bool _p2Capturing;
 
         SpriteRenderer _capturedCircleSR;
 
@@ -26,6 +27,9 @@ namespace Gisha.TanksGame.Core
 
         private void Update()
         {
+            if (Mathf.Abs(_captureProgress) >= 1f)
+                AudioManager.Instance.StopSFX("capture");
+            
             // First player capturing.
             if (_p1Capturing && !_p2Capturing)
             {
@@ -51,10 +55,9 @@ namespace Gisha.TanksGame.Core
         {
             if (value < 0)
                 return leftColor;
-            else if (value > 0)
+            if (value > 0)
                 return rightColor;
-            else
-                return middleColor;
+            return middleColor;
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -63,6 +66,8 @@ namespace Gisha.TanksGame.Core
                 _p1Capturing = true;
             else if (other.CompareTag("Player2"))
                 _p2Capturing = true;
+            
+            AudioManager.Instance.PlaySFX("capture");
         }
 
         private void OnTriggerExit2D(Collider2D other)
@@ -71,6 +76,8 @@ namespace Gisha.TanksGame.Core
                 _p1Capturing = false;
             else if (other.CompareTag("Player2"))
                 _p2Capturing = false;
+            
+            AudioManager.Instance.StopSFX("capture");
         }
     }
 }

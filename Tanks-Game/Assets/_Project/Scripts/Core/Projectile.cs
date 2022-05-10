@@ -1,3 +1,4 @@
+using Gisha.Effects.Audio;
 using UnityEngine;
 
 namespace Gisha.TanksGame.Core
@@ -50,7 +51,7 @@ namespace Gisha.TanksGame.Core
         private void DestroyProjectile()
         {
             Debug.Log("Projectile was destroyed!");
-
+            AudioManager.Instance.PlaySFX("projectile_explode");
             Destroy(gameObject);
         }
 
